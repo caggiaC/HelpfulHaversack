@@ -4,11 +4,13 @@ namespace HelpfulHaversack.Services.ItemAPI.Models.Dto
 {
     public class ItemDto
     {
-        public int ItemId { get; }
+        public Guid ItemId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int? OwnerId { get; set; }
-        public float? Weight { get; set; }
-        public int? Value { get; set; }
+        public Guid? OwnerId { get; set; }
+        public double Weight { get; set; }
+        public double Value { get; set; }
+
     }
+
 }

@@ -1,4 +1,5 @@
 ﻿using HelpfulHaversack.Services.ItemAPI.Data;
+using HelpfulHaversack.Services.ItemAPI.Models.Dto;
 using System.ComponentModel.DataAnnotations;
 
 namespace HelpfulHaversack.Services.ItemAPI.Models
@@ -28,21 +29,35 @@ namespace HelpfulHaversack.Services.ItemAPI.Models
     }
     public class Item
     {
+        private readonly Guid _id;
+
         [Key]
-        public int ItemId { get; set; }
+        public Guid ItemId { get { return _id; } }
 
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = "A New Item";
 
         [Required]
-        public string Description { get; set; }
+        public string Description { get; set; } = String.Empty;
 
-        public int? OwnerId { get; set; }
+        public Guid? OwnerId { get; set; }
 
-        public double Weight { get; set; }
+        public double Weight { get; set; } = 0;
 
-        public int? Value { get; set; }
+        public double Value { get; set; } = 0;
+
+        public Item()
+        {
+            _id = Guid.NewGuid();
+        }
+
+        public Item(Guid guid)
+        {
+            _id = guid;
+        }
 
     }
+
+
 }
     
