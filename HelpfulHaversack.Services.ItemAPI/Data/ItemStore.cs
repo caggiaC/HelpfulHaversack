@@ -31,7 +31,7 @@ namespace HelpfulHaversack.Services.ItemAPI.Data
             }
         };
 
-        public static Boolean Patch(Item item)
+        public static Boolean Replace(Item item)
         {
             try
             {

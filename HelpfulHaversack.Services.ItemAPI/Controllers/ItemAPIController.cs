@@ -126,18 +126,18 @@ namespace HelpfulHaversack.Services.ItemAPI.Controllers
         }
 
         [HttpPatch("{id:guid}")]
-        public ResponseDto UpdateItemPartial(Guid itemId, JsonPatchDocument<ItemDto> patchDto)
+        public ResponseDto UpdateItemPartial(Guid id, JsonPatchDocument<ItemDto> patchDto)
         {
             try
             {
-                var item = ItemStore.Items.First(u => u.ItemId == itemId);
+                var item = ItemStore.Items.First(u => u.ItemId == id);
 
                 ItemDto itemDto = ItemMapper.ItemToDto(item);
 
                 patchDto.ApplyTo(itemDto);
 
                 var patchedItem = ItemMapper.DtoToItem(itemDto);
-                ItemStore.Patch(patchedItem);
+                ItemStore.Replace(patchedItem);
 
                 _response.Result = patchedItem;
                 _response.Message = $"Successfully updated {patchedItem.Name} [{patchedItem.ItemId}]";
