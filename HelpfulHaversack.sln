@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpfulHaversack.Services.ItemAPI", "HelpfulHaversack.Services.ItemAPI\HelpfulHaversack.Services.ItemAPI.csproj", "{678846F9-F7C7-4354-8456-0BB8236FAADF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelpfulHaversack.Services.ItemAPI", "HelpfulHaversack.Services.ItemAPI\HelpfulHaversack.Services.ItemAPI.csproj", "{678846F9-F7C7-4354-8456-0BB8236FAADF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{EFADBF00-43CF-4249-B282-561EDCCF1573}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{E841F33C-665B-4593-90BA-0086ADAF24A6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.TreasuryAPI", "Services.ContainerAPI\Services.TreasuryAPI.csproj", "{30954C42-AF09-4767-81D2-E836479A8AE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,9 +21,17 @@ Global
 		{678846F9-F7C7-4354-8456-0BB8236FAADF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{678846F9-F7C7-4354-8456-0BB8236FAADF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{678846F9-F7C7-4354-8456-0BB8236FAADF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30954C42-AF09-4767-81D2-E836479A8AE1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30954C42-AF09-4767-81D2-E836479A8AE1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30954C42-AF09-4767-81D2-E836479A8AE1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30954C42-AF09-4767-81D2-E836479A8AE1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{678846F9-F7C7-4354-8456-0BB8236FAADF} = {E841F33C-665B-4593-90BA-0086ADAF24A6}
+		{30954C42-AF09-4767-81D2-E836479A8AE1} = {E841F33C-665B-4593-90BA-0086ADAF24A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F244CFE0-CF95-41AA-A560-660BBBE8C4E5}

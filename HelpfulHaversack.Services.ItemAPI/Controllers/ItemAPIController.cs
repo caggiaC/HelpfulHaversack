@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using HelpfulHaversack.Services.ItemAPI.Data;
+﻿using HelpfulHaversack.Services.ItemAPI.Data;
 using HelpfulHaversack.Services.ItemAPI.Models;
 using HelpfulHaversack.Services.ItemAPI.Models.Dto;
 using HelpfulHaversack.Services.ItemAPI.Util;
@@ -126,11 +125,11 @@ namespace HelpfulHaversack.Services.ItemAPI.Controllers
         }
 
         [HttpPatch("{id:guid}")]
-        public ResponseDto UpdateItemPartial(Guid id, JsonPatchDocument<ItemDto> patchDto)
+        public ResponseDto UpdateItemPartial(Guid itemId, JsonPatchDocument<ItemDto> patchDto)
         {
             try
             {
-                var item = ItemStore.Items.First(u => u.ItemId == id);
+                var item = ItemStore.Items.First(u => u.ItemId == itemId);
 
                 ItemDto itemDto = ItemMapper.ItemToDto(item);
 
