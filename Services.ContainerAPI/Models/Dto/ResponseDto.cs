@@ -1,4 +1,4 @@
-﻿namespace Services.ContainerAPI.Models.Dto
+﻿namespace Services.TreasuryAPI.Models.Dto
 {
     public class ResponseDto
     {
