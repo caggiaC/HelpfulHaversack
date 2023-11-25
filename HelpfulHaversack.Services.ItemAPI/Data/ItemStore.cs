@@ -1,4 +1,5 @@
 ﻿using HelpfulHaversack.Services.ItemAPI.Models;
+using HelpfulHaversack.Services.ItemAPI.Models.Dto;
 
 namespace HelpfulHaversack.Services.ItemAPI.Data
 {
@@ -29,5 +30,23 @@ namespace HelpfulHaversack.Services.ItemAPI.Data
                 Value = 25
             }
         };
+
+        public static Boolean Patch(Item item)
+        {
+            try
+            {
+                Items.Remove(
+                    Items.First(u => u.ItemId == item.ItemId));
+
+                Items.Add(item);
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
     }
 }

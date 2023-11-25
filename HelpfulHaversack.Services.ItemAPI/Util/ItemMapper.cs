@@ -5,7 +5,7 @@ namespace HelpfulHaversack.Services.ItemAPI.Util
 {
     public static class ItemMapper
     {
-        public static ItemDto Map(Item item)
+        public static ItemDto ItemToDto(Item item)
         {
             return new ItemDto
             {
@@ -18,7 +18,7 @@ namespace HelpfulHaversack.Services.ItemAPI.Util
             };
         }
 
-        public static Item Map(ItemDto item)
+        public static Item DtoToItem(ItemDto item)
         {
             return new Item(item.ItemId)
             {
@@ -30,25 +30,25 @@ namespace HelpfulHaversack.Services.ItemAPI.Util
             };
         }
 
-        public static List<Item> Map(IEnumerable<ItemDto> itemDto_list)
+        public static List<Item> DtoToItem(IEnumerable<ItemDto> itemDto_list)
         {
             List<Item> returnList = new();
 
             foreach (ItemDto itemDto in itemDto_list)
             {
-                returnList.Add(Map(itemDto));
+                returnList.Add(DtoToItem(itemDto));
             }
 
             return returnList;
         }
 
-        public static List<ItemDto> Map(IEnumerable<Item> item_list)
+        public static List<ItemDto> ItemToDto(IEnumerable<Item> item_list)
         {
             List<ItemDto> returnList = new();
 
             foreach (Item item in item_list)
             {
-                returnList.Add(Map(item));
+                returnList.Add(ItemToDto(item));
             }
 
             return returnList;
