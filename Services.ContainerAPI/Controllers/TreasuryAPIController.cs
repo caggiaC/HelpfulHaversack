@@ -122,6 +122,7 @@ namespace Services.ContainerAPI.Controllers
         }
 
         [HttpPost]
+        [Route("createTreasury")]
         public ResponseDto CreateTreasury([FromBody] TreasuryDto dto)
         {
             try
@@ -139,12 +140,12 @@ namespace Services.ContainerAPI.Controllers
         }
 
         [HttpPost]
-        [Route("")]
+        [Route("createItem")]
         public ResponseDto createItem([FromBody] ItemDto dto)
         {
             try
             {
-
+                throw new NotImplementedException();
             }
             catch (Exception ex)
             {
@@ -154,5 +155,6 @@ namespace Services.ContainerAPI.Controllers
 
             return _response;
         }
+
     }
 }
