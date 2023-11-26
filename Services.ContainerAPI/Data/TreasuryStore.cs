@@ -1,6 +1,6 @@
-﻿using Services.TreasuryAPI.Models;
+﻿using Services.ContainerAPI.Models;
 
-namespace Services.TreasuryAPI.Data
+namespace Services.ContainerAPI.Data
 {
     public static class TreasuryStore
     {

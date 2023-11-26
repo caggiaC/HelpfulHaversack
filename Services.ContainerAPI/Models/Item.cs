@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Services.TreasuryAPI.Models
+namespace Services.ContainerAPI.Models
 {
     public class Item
     {

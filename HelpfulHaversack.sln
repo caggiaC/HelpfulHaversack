@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontend", "Frontend", "{EF
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{E841F33C-665B-4593-90BA-0086ADAF24A6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services.TreasuryAPI", "Services.ContainerAPI\Services.TreasuryAPI.csproj", "{30954C42-AF09-4767-81D2-E836479A8AE1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpfulHaversack.Services.ContainerAPI", "Services.ContainerAPI\HelpfulHaversack.Services.ContainerAPI.csproj", "{30954C42-AF09-4767-81D2-E836479A8AE1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

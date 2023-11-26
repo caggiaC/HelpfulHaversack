@@ -1,4 +1,3 @@
-using AutoMapper;
 using HelpfulHaversack.Services.ItemAPI;
 using HelpfulHaversack.Services.ItemAPI.Data;
 

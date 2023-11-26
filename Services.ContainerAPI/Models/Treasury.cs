@@ -1,4 +1,4 @@
-﻿namespace Services.TreasuryAPI.Models
+﻿namespace Services.ContainerAPI.Models
 {
     public class Treasury
     {
@@ -8,13 +8,13 @@
 
         public string Name { get; set; } = String.Empty;
 
+        public List<Item> Inventory { get; set; } = new();
+
         public int PP { get; set; } = 0;
         public int GP { get; set; } = 0;
         public int EP { get; set; } = 0;
         public int SP { get; set; } = 0;
         public int CP { get; set; } = 0;
-
-        public List<Item> Inventory { get; set; } = new();
 
         public Treasury()
         {
@@ -25,5 +25,6 @@
         {
             _id = id;
         }
+
     }
 }

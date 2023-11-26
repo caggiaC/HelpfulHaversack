@@ -1,7 +1,7 @@
-﻿using Services.TreasuryAPI.Models;
-using Services.TreasuryAPI.Models.Dto;
+﻿using Services.ContainerAPI.Models;
+using Services.ContainerAPI.Models.Dto;
 
-namespace Services.TreasuryAPI.Util
+namespace Services.ContainerAPI.Util
 {
     public static class Mapper
     {

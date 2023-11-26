@@ -1,4 +1,4 @@
-﻿namespace Services.TreasuryAPI.Models.Dto
+﻿namespace Services.ContainerAPI.Models.Dto
 {
     public class TreasuryDto
     {
