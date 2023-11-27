@@ -3,14 +3,43 @@ using HelpfulHaversack.Services.ContainerAPI.Models;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Data
 {
-    public sealed class ItemTemplateList
+    public sealed class ItemTemplateMasterSet
     {
-        private static Dictionary<string,ItemTemplate> templates = new();
-        private static readonly Lazy<ItemTemplateList> _instance = new(() => new ItemTemplateList());
+        private static Dictionary<string,IItemTemplate> templates = new();
+        private static readonly Lazy<ItemTemplateMasterSet> _instance = new(() => new ItemTemplateMasterSet());
 
-        private ItemTemplateList()
+        private ItemTemplateMasterSet()
         {
             //Seed list; temporary for development
+            SeedList();     
+
+            //Load template list from file
+
+        }//End Constructor
+
+        public static ItemTemplateMasterSet Instance { get { return _instance.Value; } }
+
+        public void Add(IItemTemplate template)
+        {
+            if(!template.IsNull())
+                templates.Add(template.Name, template);
+        }
+
+        public IItemTemplate Get(string name)
+        {
+            try
+            {
+                return templates[name];
+            }
+            catch(KeyNotFoundException)
+            {
+                return NullItemTemplate.Instance;
+            }
+            
+        }
+
+        private void SeedList()
+        {
             Add(new ItemTemplate("Longsword")
             {
                 Description = "A versatile melee weapon.",
@@ -22,11 +51,11 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
 
             Add(new ItemTemplate("Dagger")
             {
-                Description = "A simple melee weapon."
+                Description = "A simple melee weapon.",
                 Weight = 1,
                 Value = 2,
                 Type = ItemTemplate.ItemType.WEAPON,
-                Rarity= ItemTemplate.ItemRarity.COMMON
+                Rarity = ItemTemplate.ItemRarity.COMMON
             });
 
             Add(new ItemTemplate("Shortbow")
@@ -46,16 +75,6 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
                 Type = ItemTemplate.ItemType.OTHER,
                 Rarity = ItemTemplate.ItemRarity.COMMON
             });
-
-            //Load template list from file
-
-        }//End Constructor
-
-        public static ItemTemplateList Instance { get { return _instance.Value; } }
-
-        public void Add(ItemTemplate itemTemplate)
-        {
-            templates.Add(itemTemplate.Name, itemTemplate);
         }
 
     }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Models
 {
-    public class ItemTemplate
+    public class ItemTemplate : IItemTemplate
     {
         private readonly string _name;
 
@@ -25,7 +25,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
             _name = name;
         }
 
-        public Item CreateInstance()
+        public Item CreateItemFrom()
         {
             return new Item(_name)
             {
@@ -36,6 +36,8 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
                 Type = this.Type
             };
         }
+
+        public Boolean IsNull() { return false; }
 
         public enum ItemRarity
         {

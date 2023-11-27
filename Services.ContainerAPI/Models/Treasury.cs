@@ -1,4 +1,6 @@
-﻿namespace Services.ContainerAPI.Models
+﻿using HelpfulHaversack.Services.ContainerAPI.Models;
+
+namespace Services.ContainerAPI.Models
 {
     public class Treasury
     {
@@ -8,7 +10,7 @@
 
         public string Name { get; set; } = String.Empty;
 
-        public List<Item> Inventory { get; set; } = new();
+        public List<IItem> Inventory { get; set; } = new();
 
         public int PP { get; set; } = 0;
         public int GP { get; set; } = 0;

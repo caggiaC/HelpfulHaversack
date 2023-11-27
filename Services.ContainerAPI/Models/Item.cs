@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Services.ContainerAPI.Models
 {
-    public class Item : ItemTemplate
+    public class Item : ItemTemplate, IItem
     {
         private readonly Guid _id;
 
@@ -23,5 +23,6 @@ namespace Services.ContainerAPI.Models
             _id = guid;
             DisplayName = name;
         }
+
     }
 }
