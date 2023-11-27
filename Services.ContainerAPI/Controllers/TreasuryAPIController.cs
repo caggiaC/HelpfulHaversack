@@ -4,6 +4,7 @@ using Services.ContainerAPI.Models;
 using Services.ContainerAPI.Models.Dto;
 using Services.ContainerAPI.Data;
 using Services.ContainerAPI.Util;
+using HelpfulHaversack.Services.ContainerAPI.Data;
 
 namespace Services.ContainerAPI.Controllers
 {
@@ -12,12 +13,14 @@ namespace Services.ContainerAPI.Controllers
     public class TreasuryAPIController
     {
         private ResponseDto _response;
+        private ItemModelStore _itemStore;
 
         //Dependency Injection
 
         public TreasuryAPIController()
         {
             _response = new ResponseDto();
+            _itemStore = new ItemModelStore();
         }
         //End Dependency Injection
 
@@ -141,7 +144,7 @@ namespace Services.ContainerAPI.Controllers
 
         [HttpPost]
         [Route("createItem")]
-        public ResponseDto createItem([FromBody] ItemDto dto)
+        public ResponseDto CreateItem([FromBody] ItemDto dto)
         {
             try
             {

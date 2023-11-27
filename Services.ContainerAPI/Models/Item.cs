@@ -10,16 +10,18 @@ namespace Services.ContainerAPI.Models
         [Key]
         public Guid ItemId { get { return _id; } }
 
-        public Item()
+        public string DisplayName { get; set; }
+
+        public Item(string name) : base(name)
         {
             _id = Guid.NewGuid();
+            DisplayName = name;
         }
 
-        public Item(Guid guid)
+        public Item(string name, Guid guid) : base(name) 
         {
             _id = guid;
+            DisplayName = name;
         }
-
-
     }
 }

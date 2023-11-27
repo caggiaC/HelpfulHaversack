@@ -2,53 +2,31 @@
 
 namespace Services.ContainerAPI.Data
 {
-    public static class TreasuryStore
+    public sealed class TreasuryStore
     {
-        public static List<Treasury> Treasuries = new List<Treasury>
+        private static List<Treasury> treasuries;
+
+        private static readonly Lazy<TreasuryStore> _instance = new(() => new TreasuryStore());
+
+        private TreasuryStore()
         {
-            new Treasury()
+            //Seed list; temporary for development
+            treasuries = new()
             {
-                Name = "Unassigned Items",
-                Inventory = new()
+                new Treasury
                 {
-                    new Item
+                    Name = "Treasure Chest",
+                    GP = 100,
+                    Inventory = new()
                     {
-                        Name = "Longsword",
-                        Description = "A versatile melee weapon.",
-                        Weight = 3.0,
-                        Value = 15
-                    },
-                    new Item
-                    {
-                        Name = "Dagger",
-                        Description = "A simple melee weapon.",
-                        Weight = 1,
-                        Value = 2
-                    },
-                    new Item
-                    {
-                        Name = "Bow",
-                        Description = "A simple ranged weapon.",
-                        Weight = 2,
-                        Value = 25
+
                     }
                 }
-            },
-            new Treasury()
-            {
-                Name = "Treasure Chest",
-                GP = 500,
-                Inventory = new()
-                {
-                    new Item
-                    {
-                        Name = "Necklace",
-                        Description = "An Ornamental Necklace.",
-                        Weight = 0.2,
-                        Value = 250
-                    }
-                }
-            }
-        };
+            };
+
+            //Load treasuries from file
+        }
+
+        public static TreasuryStore Instance { get {  return _instance.Value; } }
     }
 }
