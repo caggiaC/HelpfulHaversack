@@ -5,6 +5,6 @@
         public Guid ItemId { get; }
         public string DisplayName { get; set; }
   
-        public Boolean IsNull();
+        public bool IsNull();
     }
 }

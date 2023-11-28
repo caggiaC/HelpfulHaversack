@@ -5,6 +5,7 @@ using Services.ContainerAPI.Models.Dto;
 using Services.ContainerAPI.Data;
 using Services.ContainerAPI.Util;
 using HelpfulHaversack.Services.ContainerAPI.Data;
+using HelpfulHaversack.Services.ContainerAPI.Models;
 
 namespace Services.ContainerAPI.Controllers
 {
@@ -13,14 +14,16 @@ namespace Services.ContainerAPI.Controllers
     public class TreasuryAPIController
     {
         private ResponseDto _response;
-        private ItemModelStore _itemStore;
+        private ItemTemplateMasterSet _templates;
+        private TreasuryStore _treasuryStore;
 
         //Dependency Injection
 
         public TreasuryAPIController()
         {
             _response = new ResponseDto();
-            _itemStore = new ItemModelStore();
+            _templates = ItemTemplateMasterSet.Instance;
+            _treasuryStore = TreasuryStore.Instance;
         }
         //End Dependency Injection
 
@@ -29,7 +32,7 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                _response.Result = TreasuryStore.Treasuries;
+                _response.Result = Mapper.TreasuryToDto(_treasuryStore.GetAllTreasuries());
                 _response.Message = "Retrieved all treasuries.";
             }
             catch (Exception ex)
@@ -47,7 +50,7 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                _response.Result = TreasuryStore.Treasuries.First(x => x.Id == treasuryId);
+                _response.Result = Mapper.TreasuryToDto(_treasuryStore.GetTreasury(treasuryId));
                 _response.Message = "Retrieved treasury";
             }
             catch (Exception ex)
@@ -65,8 +68,8 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                var sourceTreasury = TreasuryStore.Treasuries.First(x => x.Id == treasuryId);
-                IEnumerable<Item> returnObjList = sourceTreasury.Inventory;
+                var sourceTreasury = _treasuryStore.GetTreasury(treasuryId);
+                IEnumerable<Item> returnObjList = sourceTreasury.GetAllItems();
 
                 _response.Result = Mapper.ItemToDto(returnObjList);
                 _response.Message = $"Retrieved {returnObjList.Count()} items from {sourceTreasury.Name} [id:{sourceTreasury.Id}].";
@@ -86,8 +89,8 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                var sourceTreasury = TreasuryStore.Treasuries.First(x => x.Id == treasuryId);
-                Item returnObj = sourceTreasury.Inventory.First(u => u.ItemId == itemId);
+                var sourceTreasury = _treasuryStore.GetTreasury(treasuryId);
+                Item returnObj = sourceTreasury.GetItem(itemId);
                 _response.Result = Mapper.ItemToDto(returnObj);
                 _response.Message = $"Successfully retrieved {returnObj.Name} [id:{returnObj.ItemId}] " +
                     $"from {sourceTreasury.Name} [id:{sourceTreasury.Id}].";
@@ -107,9 +110,9 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                var sourceTreasury = TreasuryStore.Treasuries.First(x => x.Id == treasuryId);
+                var sourceTreasury = _treasuryStore.GetTreasury(treasuryId);
                 IEnumerable<Item> returnObjList =
-                    sourceTreasury.Inventory.FindAll(u => u.Name.ToLower().Contains(itemName.ToLower()));
+                    sourceTreasury.GetItemsByName(itemName);
                 _response.Result = Mapper.ItemToDto(returnObjList);
                 _response.Message = $"Successfully retrieved {returnObjList.Count()} items " +
                     $"from {sourceTreasury} [id:{sourceTreasury.Id}].";
@@ -130,7 +133,7 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                TreasuryStore.Treasuries.Add(Mapper.DtoToTreasury(dto));
+                _treasuryStore.AddTreasury(Mapper.DtoToTreasury(dto));
                 _response.Message = $"Created {dto.Name} [id:{dto.Id}]";
             }
             catch (Exception ex)

@@ -23,7 +23,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
             return NullItem.Instance;
         }
 
-        public Boolean IsNull() { return true; }
+        public bool IsNull() { return true; }
 
 
 

@@ -8,7 +8,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
 
         public Guid ItemId { get { return Guid.Empty; } }
         public string DisplayName { get { return String.Empty; } set { return; } }
-        public new Boolean IsNull() { return true; }
+        public new bool IsNull() { return true; }
 
         public static IItem Instance { get { return _instance; } }
         private NullItem() : base(String.Empty) { }

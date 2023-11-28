@@ -25,7 +25,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
                 templates.Add(template.Name, template);
         }
 
-        public IItemTemplate Get(string name)
+        public IItemTemplate GetTemplate(string name)
         {
             try
             {

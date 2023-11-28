@@ -15,6 +15,6 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
         public ItemType Type { get; set; }
 
         public IItem CreateItemFrom();
-        public Boolean IsNull();
+        public bool IsNull();
     }
 }

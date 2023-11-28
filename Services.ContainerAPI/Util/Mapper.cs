@@ -31,9 +31,9 @@ namespace Services.ContainerAPI.Util
 
         public static Item DtoToItem(ItemDto dto)
         {
-            return new Item(dto.ItemId)
+            return new Item(dto.Name, dto.ItemId)
             {
-                Name = dto.Name,
+                DisplayName = dto.DisplayName,
                 Description = dto.Description,
                 Weight = dto.Weight,
                 Value = dto.Value,
@@ -63,7 +63,7 @@ namespace Services.ContainerAPI.Util
                 EP = treasury.EP,
                 SP = treasury.SP,
                 CP = treasury.CP,
-                Inventory = treasury.Inventory
+                Inventory = treasury.GetAllItems()
             };
         }
 
@@ -81,7 +81,7 @@ namespace Services.ContainerAPI.Util
 
         public static Treasury DtoToTreasury(TreasuryDto dto)
         {
-            return new Treasury(dto.Id)
+            var temp = new Treasury(dto.Id)
             {
                 Name = dto.Name,
                 PP = dto.PP,
@@ -89,8 +89,9 @@ namespace Services.ContainerAPI.Util
                 EP = dto.EP,
                 SP = dto.SP,
                 CP = dto.CP,
-                Inventory = dto.Inventory
             };
+            temp.AddItems(dto.Inventory);
+            return temp;
         }
 
         public static List<Treasury> DtoToTreasury(IEnumerable<TreasuryDto> dto_list)

@@ -25,7 +25,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
             _name = name;
         }
 
-        public Item CreateItemFrom()
+        public IItem CreateItemFrom()
         {
             return new Item(_name)
             {
@@ -37,7 +37,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
             };
         }
 
-        public Boolean IsNull() { return false; }
+        public bool IsNull() { return false; }
 
         public enum ItemRarity
         {
