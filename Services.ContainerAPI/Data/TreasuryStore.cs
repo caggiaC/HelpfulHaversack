@@ -34,6 +34,16 @@ namespace Services.ContainerAPI.Data
             _treasuries.Add(treasury);
         }
 
+        public void RemoveTreasury(Guid treasuryId)
+        {
+            _treasuries.Remove(_treasuries.First(x => x.Id == treasuryId));
+        }
+
+        public void RemoveTreasury(Treasury treasury)
+        {
+            _treasuries.Remove(treasury);
+        }
+
         private void SeedList()
         {
             Treasury temp = new()

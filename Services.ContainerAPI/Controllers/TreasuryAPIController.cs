@@ -27,6 +27,7 @@ namespace Services.ContainerAPI.Controllers
         }
         //End Dependency Injection
 
+        //Get Endpoints
         [HttpGet]        
         public ResponseDto GetAllTreasuries()
         {
@@ -163,6 +164,7 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
+        //Post Endpoints
         [HttpPost]
         [Route("create/treasury")]
         public ResponseDto CreateTreasury([FromBody] TreasuryDto treasuryDto)
@@ -199,5 +201,46 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
+        //Put Endpoints
+
+        //Patch Endpoints
+
+        //Delete Endpoints
+        [HttpDelete]
+        [Route("{treasuryId:guid}")]
+        public ResponseDto DeleteTreasury(Guid treasuryId)
+        {
+            try
+            {
+                Treasury treasuryToDelete = _treasuryStore.GetTreasury(treasuryId);
+                _treasuryStore.RemoveTreasury(treasuryId);
+                _response.Message = $"Removed treasury {treasuryToDelete.Name} [id:{treasuryId}]";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
+        [HttpDelete]
+        [Route("templates/{templateName}")]
+        public ResponseDto DeleteItemTemplate(string templateName)
+        {
+            try
+            {
+                _templates.RemoveTemplate(templateName);
+                _response.Message = $"Deleted template for {templateName}";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
     }
 }

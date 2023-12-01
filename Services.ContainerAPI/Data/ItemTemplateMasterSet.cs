@@ -48,6 +48,14 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
             return new List<ItemTemplate>(_templates.Values);
         }
 
+        public void RemoveTemplate(string name) 
+        {
+            if (!_templates.ContainsKey(name))
+                throw new ArgumentException($"Template with the name \"{name}\" was not found.");
+
+            _templates.Remove(name);
+        }
+
         private void SeedList()
         {
             Add(new ItemTemplate("Longsword")
