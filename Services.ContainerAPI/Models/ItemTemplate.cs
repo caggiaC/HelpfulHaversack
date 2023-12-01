@@ -37,6 +37,18 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
             };
         }
 
+        public static ItemTemplate CreateTemplateFromItem(Item item)
+        {
+            return new ItemTemplate(item.Name)
+            {
+                Description = item.Description,
+                Weight = item.Weight,
+                Value = item.Value,
+                Rarity = item.Rarity,
+                Type = item.Type,
+            };
+        }
+
         public bool IsNull() { return false; }
 
         public enum ItemRarity

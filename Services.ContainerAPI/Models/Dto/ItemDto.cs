@@ -10,7 +10,7 @@ namespace Services.ContainerAPI.Models.Dto
         public string Description { get; set; } = String.Empty;
         public double Weight { get; set; }
         public double Value { get; set; }
-        public ItemRarity? Rarity { get; set; }
-        public ItemType? Type { get; set; }
+        public ItemRarity Rarity { get; set; }
+        public ItemType Type { get; set; }
     }
 }

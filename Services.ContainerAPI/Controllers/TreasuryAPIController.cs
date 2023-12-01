@@ -84,7 +84,7 @@ namespace Services.ContainerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{treasuryId:guid}/{itemId:guid}")]
+        [Route("{treasuryId:guid}/inventory/{itemId:guid}")]
         public ResponseDto GetItemFrom(Guid treasuryId, Guid itemId)
         {
             try
@@ -105,7 +105,7 @@ namespace Services.ContainerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{treasuryId:guid}/itemName")]
+        [Route("{treasuryId:guid}/inventory/itemName")]
         public ResponseDto GetItemsByName(Guid treasuryId, string itemName)
         {
             try
@@ -127,14 +127,32 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
-        [HttpPost]
-        [Route("createTreasury")]
-        public ResponseDto CreateTreasury([FromBody] TreasuryDto dto)
+        [HttpGet]
+        [Route("templates")]
+        public ResponseDto GetAllItemTemplates()
         {
             try
             {
-                _treasuryStore.AddTreasury(Mapper.DtoToTreasury(dto));
-                _response.Message = $"Created {dto.Name} [id:{dto.Id}]";
+                _response.Result = _templates.GetAllTemplates();
+                _response.Message = "Retrieved all item templates.";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
+        [HttpGet]
+        [Route("templates/{templateName}")]
+        public ResponseDto GetItemTemplate(string templateName)
+        {
+            try
+            {
+                _response.Result = _templates.GetTemplate(templateName);
+                _response.Message = $"Retrieved template for {templateName}";
             }
             catch (Exception ex)
             {
@@ -146,12 +164,31 @@ namespace Services.ContainerAPI.Controllers
         }
 
         [HttpPost]
-        [Route("createItem")]
-        public ResponseDto CreateItem([FromBody] ItemDto dto)
+        [Route("create/treasury")]
+        public ResponseDto CreateTreasury([FromBody] TreasuryDto treasuryDto)
         {
             try
             {
-                throw new NotImplementedException();
+                _treasuryStore.AddTreasury(Mapper.DtoToTreasury(treasuryDto));
+                _response.Message = $"Created {treasuryDto.Name} [id:{treasuryDto.Id}]";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
+        [HttpPost]
+        [Route("create/template")]
+        public ResponseDto CreateItemTemplate([FromBody] ItemDto dto)
+        {
+            try
+            {
+                _templates.Add(ItemTemplate.CreateTemplateFromItem(Mapper.DtoToItem(dto)));
+                _response.Message = $"Created template for {dto.Name}";
             }
             catch (Exception ex)
             {

@@ -5,7 +5,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
 {
     public sealed class ItemTemplateMasterSet
     {
-        private static Dictionary<string,IItemTemplate> templates = new();
+        private static Dictionary<string,ItemTemplate> _templates = new();
         private static readonly Lazy<ItemTemplateMasterSet> _instance = new(() => new ItemTemplateMasterSet());
 
         private ItemTemplateMasterSet()
@@ -21,21 +21,31 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
 
         public void Add(IItemTemplate template)
         {
-            if(!template.IsNull())
-                templates.Add(template.Name, template);
+            if (template.IsNull())
+                throw new ArgumentException("Null template was recieved.");
+                
+            if (_templates.ContainsKey(template.Name))
+                throw new ArgumentException("Template with this name already exists.");
+
+            _templates.Add(template.Name, (ItemTemplate)template);
         }
 
         public IItemTemplate GetTemplate(string name)
         {
             try
             {
-                return templates[name];
+                return _templates[name];
             }
             catch(KeyNotFoundException)
             {
                 return NullItemTemplate.Instance;
             }
             
+        }
+
+        public List<ItemTemplate> GetAllTemplates()
+        {
+            return new List<ItemTemplate>(_templates.Values);
         }
 
         private void SeedList()
