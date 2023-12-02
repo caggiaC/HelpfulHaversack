@@ -1,5 +1,4 @@
-﻿using Services.ContainerAPI.Models;
-using static HelpfulHaversack.Services.ContainerAPI.Models.ItemTemplate;
+﻿using static HelpfulHaversack.Services.ContainerAPI.Models.ItemTemplate;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Models
 {

@@ -276,6 +276,7 @@ namespace Services.ContainerAPI.Controllers
             {
                 Treasury targetTreasury = _treasuryStore.GetTreasury(treasuryId);
                 Item deletedItem = targetTreasury.RemoveItem(itemId);
+
                 _response.Message = $"Deleted {deletedItem.Name} [id:{deletedItem.ItemId}] from " +
                     $"{targetTreasury.Name} [id:{targetTreasury.Id}]";
             }
