@@ -28,7 +28,8 @@ namespace Services.ContainerAPI.Controllers
         //End Dependency Injection
 
         //Get Endpoints
-        [HttpGet]        
+        [HttpGet]
+        [Route("treasuries")]
         public ResponseDto GetAllTreasuries()
         {
             try
@@ -46,7 +47,7 @@ namespace Services.ContainerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{treasuryId:guid}")]
+        [Route("treasuries/{treasuryId:guid}")]
         public ResponseDto GetTreasury(Guid treasuryId)
         {
             try
@@ -64,7 +65,7 @@ namespace Services.ContainerAPI.Controllers
         }
         
         [HttpGet]
-        [Route("{treasuryId:guid}/inventory")]
+        [Route("treasuries/{treasuryId:guid}/inventory")]
         public ResponseDto GetAllItemsFrom(Guid treasuryId)
         {
             try
@@ -85,7 +86,7 @@ namespace Services.ContainerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{treasuryId:guid}/inventory/{itemId:guid}")]
+        [Route("treasuries/{treasuryId:guid}/inventory/{itemId:guid}")]
         public ResponseDto GetItemFrom(Guid treasuryId, Guid itemId)
         {
             try
@@ -106,7 +107,7 @@ namespace Services.ContainerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{treasuryId:guid}/inventory/itemName")]
+        [Route("treasuries/{treasuryId:guid}/inventory/itemName")]
         public ResponseDto GetItemsByName(Guid treasuryId, string itemName)
         {
             try
@@ -207,7 +208,7 @@ namespace Services.ContainerAPI.Controllers
 
         //Delete Endpoints
         [HttpDelete]
-        [Route("{treasuryId:guid}")]
+        [Route("treasuries/{treasuryId:guid}")]
         public ResponseDto DeleteTreasury(Guid treasuryId)
         {
             try

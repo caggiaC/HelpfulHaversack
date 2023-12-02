@@ -7,6 +7,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
     {
         private readonly string _name;
 
+        //Properties
         [Key]
         public string Name { get { return _name; } } 
 
@@ -20,11 +21,14 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
 
         public ItemType Type { get; set; } = ItemType.OTHER;
 
+        //Constructors
         public ItemTemplate(string name)
         {
             _name = name;
         }
 
+
+        //Methods
         public IItem CreateItemFrom()
         {
             return new Item(_name)
@@ -51,6 +55,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
 
         public bool IsNull() { return false; }
 
+        //Other
         public enum ItemRarity
         {
             COMMON,
