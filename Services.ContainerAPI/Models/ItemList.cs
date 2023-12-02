@@ -12,11 +12,17 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
                 _list.Add((Item)item);
         }
 
-        public bool Remove(IItem item)
+        public Item Remove(Item item)
         {
-            if(!item.IsNull())
-                return _list.Remove((Item)item);
-            return false;
+            _list.Remove(item);
+            return item;
+        }
+
+        public Item Remove(Guid itemId)
+        {
+            Item targetItem = _list.First(i => i.ItemId == itemId);
+            _list.Remove(targetItem);
+            return targetItem;
         }
 
         public bool Contains(IItem item)

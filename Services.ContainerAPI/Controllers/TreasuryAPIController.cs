@@ -13,9 +13,9 @@ namespace Services.ContainerAPI.Controllers
     [ApiController]
     public class TreasuryAPIController
     {
-        private ResponseDto _response;
-        private ItemTemplateMasterSet _templates;
-        private TreasuryStore _treasuryStore;
+        private readonly ResponseDto _response;
+        private readonly ItemTemplateMasterSet _templates;
+        private readonly TreasuryStore _treasuryStore;
 
         //Dependency Injection
 
@@ -63,7 +63,29 @@ namespace Services.ContainerAPI.Controllers
 
             return _response;
         }
-        
+
+        [HttpGet]
+        [Route("treasuries/search={treasuryName}")]
+        public ResponseDto GetTreasuriesByName(string treasuryName)
+        {
+            try
+            {
+                IEnumerable<Treasury> returnList = _treasuryStore.GetTreasuriesByName(treasuryName);
+                _response.Result = returnList;
+                int listLength = returnList.Count();
+                _response.Message = (listLength > 0) ?
+                    $"Retrieved {listLength} treasuries." :
+                    $"No treasuries found that matched search \"{treasuryName}\"";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
         [HttpGet]
         [Route("treasuries/{treasuryId:guid}/inventory")]
         public ResponseDto GetAllItemsFrom(Guid treasuryId)
@@ -107,7 +129,7 @@ namespace Services.ContainerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("treasuries/{treasuryId:guid}/inventory/itemName")]
+        [Route("treasuries/{treasuryId:guid}/inventory/search={itemName}")]
         public ResponseDto GetItemsByName(Guid treasuryId, string itemName)
         {
             try
@@ -204,7 +226,9 @@ namespace Services.ContainerAPI.Controllers
 
         //Put Endpoints
 
+
         //Patch Endpoints
+
 
         //Delete Endpoints
         [HttpDelete]
@@ -234,6 +258,26 @@ namespace Services.ContainerAPI.Controllers
             {
                 _templates.RemoveTemplate(templateName);
                 _response.Message = $"Deleted template for {templateName}";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
+        [HttpDelete]
+        [Route("treasuries/{treasuryId:guid}/inventory/{itemId:guid}")]
+        public ResponseDto DeleteItemFromTreasury(Guid treasuryId, Guid itemId)
+        {
+            try
+            {
+                Treasury targetTreasury = _treasuryStore.GetTreasury(treasuryId);
+                Item deletedItem = targetTreasury.RemoveItem(itemId);
+                _response.Message = $"Deleted {deletedItem.Name} [id:{deletedItem.ItemId}] from " +
+                    $"{targetTreasury.Name} [id:{targetTreasury.Id}]";
             }
             catch (Exception ex)
             {

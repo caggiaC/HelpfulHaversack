@@ -28,6 +28,11 @@ namespace Services.ContainerAPI.Data
 
         public List<Treasury> GetAllTreasuries() { return _treasuries; }
 
+        public List<Treasury> GetTreasuriesByName(string treasuryName)
+        {
+            return _treasuries.FindAll(t => t.Name.ToLower().Contains(treasuryName.ToLower()));
+        }
+
         public void AddTreasury(Treasury treasury)
         {
             if(_treasuries.Contains(treasury)) { throw new ArgumentException("Treasury with this ID already exists."); }
@@ -42,6 +47,11 @@ namespace Services.ContainerAPI.Data
         public void RemoveTreasury(Treasury treasury)
         {
             _treasuries.Remove(treasury);
+        }
+
+        public void RemoveItemFromTreasury(Guid treasuryId, Guid itemId)
+        {
+            _treasuries.First(t => t.Id == treasuryId).RemoveItem(itemId);
         }
 
         private void SeedList()

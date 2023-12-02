@@ -5,7 +5,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
 {
     public sealed class ItemTemplateMasterSet
     {
-        private static Dictionary<string,ItemTemplate> _templates = new();
+        private static readonly Dictionary<string,ItemTemplate> _templates = new();
         private static readonly Lazy<ItemTemplateMasterSet> _instance = new(() => new ItemTemplateMasterSet());
 
         private ItemTemplateMasterSet()

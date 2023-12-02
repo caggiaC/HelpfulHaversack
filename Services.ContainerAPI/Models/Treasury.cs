@@ -38,14 +38,19 @@ namespace Services.ContainerAPI.Models
                 _inventory.Add(item);
         }
 
-        public void RemoveItem(IItem item)
+        public Item RemoveItem(Item item)
         {
-            _inventory.Remove(item);
+            return _inventory.Remove(item);
         }
 
-        public Item GetItem(Guid id)
+        public Item RemoveItem(Guid itemId)
         {
-            throw new NotImplementedException();
+            return _inventory.Remove(itemId);
+        }
+
+        public Item GetItem(Guid itemId)
+        {
+            return _inventory.GetItem(itemId);
         }
 
         public List<Item> GetItemsByName(string name)
