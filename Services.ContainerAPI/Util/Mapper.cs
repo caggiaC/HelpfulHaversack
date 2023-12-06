@@ -1,4 +1,5 @@
 ﻿using HelpfulHaversack.Services.ContainerAPI.Models;
+using HelpfulHaversack.Services.ContainerAPI.Models.Dto;
 using Services.ContainerAPI.Models;
 using Services.ContainerAPI.Models.Dto;
 
@@ -23,9 +24,7 @@ namespace Services.ContainerAPI.Util
             List<ItemDto> returnList = new();
 
             foreach (Item item in item_list)
-            {
                 returnList.Add(ItemToDto(item));
-            }
 
             return returnList;
         }
@@ -46,9 +45,7 @@ namespace Services.ContainerAPI.Util
             List<Item> returnList = new();
 
             foreach (ItemDto itemDto in dto_list)
-            {
                 returnList.Add(DtoToItem(itemDto));
-            }
 
             return returnList;
         }
@@ -73,9 +70,7 @@ namespace Services.ContainerAPI.Util
             List<TreasuryDto> returnList = new();
 
             foreach (Treasury treasury in treasury_list)
-            {
                 returnList.Add(TreasuryToDto(treasury));
-            }
 
             return returnList;
         }
@@ -100,12 +95,56 @@ namespace Services.ContainerAPI.Util
             List<Treasury> returnList = new();
 
             foreach (TreasuryDto dto in dto_list)
-            {
                 returnList.Add(DtoToTreasury(dto));
-            }
 
             return returnList;
         }
+
+        //ItemTemplate => Dto
+        public static ItemTemplateDto ItemTemplateToDto(ItemTemplate itemTemplate)
+        {
+            return new ItemTemplateDto
+            {
+                Name = itemTemplate.Name,
+                Description = itemTemplate.Description,
+                Weight = itemTemplate.Weight,
+                Value = itemTemplate.Value,
+                Rarity = itemTemplate.Rarity,
+                Type = itemTemplate.Type
+            };
+        }
+        public static List<ItemTemplateDto> ItemTemplateToDto(IEnumerable<ItemTemplate> itemTemplate_list)
+        {
+            List<ItemTemplateDto> returnList = new();
+
+            foreach (ItemTemplate itemTemplate in itemTemplate_list)
+                returnList.Add(ItemTemplateToDto(itemTemplate));
+
+            return returnList;
+        }
+
+        //Dto => ItemTemplate
+        public static ItemTemplate DtoToItemTemplate(ItemTemplateDto dto)
+        {
+            return new ItemTemplate(dto.Name)
+            {
+                Description = dto.Description,
+                Weight = dto.Weight,
+                Value = dto.Value,
+                Rarity = dto.Rarity,
+                Type = dto.Type
+            };
+        }
+        public static List<ItemTemplate> DtoToItemTemplate(IEnumerable<ItemTemplateDto> dto_list)
+        {
+            List<ItemTemplate> returnList = new();
+
+            foreach (ItemTemplateDto dto in dto_list)
+                returnList.Add(DtoToItemTemplate(dto));
+
+            return returnList;
+        }
+
 
     }
 }

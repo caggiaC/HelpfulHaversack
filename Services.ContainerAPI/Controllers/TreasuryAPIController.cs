@@ -6,6 +6,7 @@ using Services.ContainerAPI.Data;
 using Services.ContainerAPI.Util;
 using HelpfulHaversack.Services.ContainerAPI.Data;
 using HelpfulHaversack.Services.ContainerAPI.Models;
+using HelpfulHaversack.Services.ContainerAPI.Models.Dto;
 
 namespace Services.ContainerAPI.Controllers
 {
@@ -27,7 +28,7 @@ namespace Services.ContainerAPI.Controllers
         }
         //End Dependency Injection
 
-        //Get Endpoints
+        //-----------------------------------Get Endpoints------------------------------------
         [HttpGet]
         [Route("treasuries")]
         public ResponseDto GetAllTreasuries()
@@ -187,7 +188,8 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
-        //Post Endpoints
+
+        //-----------------------------------Post Endpoints-----------------------------------
         [HttpPost]
         [Route("create/treasury")]
         public ResponseDto CreateTreasury([FromBody] TreasuryDto treasuryDto)
@@ -224,13 +226,62 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
-        //Put Endpoints
+
+        //-----------------------------------Put Endpoints------------------------------------
+        [HttpPut]
+        [Route("templates/{templateName}")]
+        public ResponseDto UpdateItemTemplate(string templateName, [FromBody] ItemTemplateDto itemTemplateDto)
+        {
+            try
+            {
+                if (itemTemplateDto == null || itemTemplateDto.Name != templateName)
+                    throw new BadHttpRequestException("Data Transfer Object was invalid or Name did not match route.");
+
+                _templates.RemoveTemplate(templateName);
+                _templates.Add(Mapper.DtoToItemTemplate(itemTemplateDto));
+
+                _response.Message = $"Updated {templateName}. Entire resource was affected.";
 
 
-        //Patch Endpoints
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
+        [HttpPut]
+        [Route("treasuries/{treasuryId:guid}")]
+        public ResponseDto UpdateTreasury(Guid treasuryId, [FromBody] TreasuryDto treasuryDto)
+        {
+            try
+            {
+                if (treasuryDto == null || treasuryDto.Id != treasuryId)
+                    throw new BadHttpRequestException("Data Transfer Object was invalid or ID did not match route.");
+
+                _treasuryStore.RemoveTreasury(treasuryId);
+                _treasuryStore.AddTreasury(Mapper.DtoToTreasury(treasuryDto));
+
+                _response.Message = $"Updated {treasuryDto.Name} [id:{treasuryDto.Id}]. " +
+                    $"Entire resource was affected.";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
 
 
-        //Delete Endpoints
+        //-----------------------------------Patch Endpoints----------------------------------
+
+
+        //-----------------------------------Delete Endpoints---------------------------------
         [HttpDelete]
         [Route("treasuries/{treasuryId:guid}")]
         public ResponseDto DeleteTreasury(Guid treasuryId)

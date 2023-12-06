@@ -63,6 +63,11 @@ namespace Services.ContainerAPI.Models
             return _inventory.GetAllItems();
         }
 
+        public bool PatchItem()
+        {
+            throw new NotImplementedException();
+        }
+
         public override bool Equals(Object? obj)
         {
             try { return ((Treasury)obj).Id == _id; }
