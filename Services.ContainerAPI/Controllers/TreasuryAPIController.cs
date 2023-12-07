@@ -275,6 +275,31 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
+        [HttpPut]
+        [Route("treasuries/{treasuryId:guid}/{itemId:guid}")]
+        public ResponseDto UpdateItem(Guid treasuryId, Guid itemId, [FromBody] ItemDto itemDto)
+        {
+            try
+            {
+                if (itemDto == null || itemDto.ItemId != itemId)
+                    throw new BadHttpRequestException("Data Transfer Object was invalid or item ID did not match route.");
+
+                var targetTreasury = _treasuryStore.GetTreasury(itemId);
+                targetTreasury.RemoveItem(itemId);
+                targetTreasury.AddItem(Mapper.DtoToItem(itemDto));
+
+                _response.Message = $"Updated {itemDto.Name} [id:{itemId} in {targetTreasury.Name} [id:{treasuryId}]. " +
+                    "Entire resource was affected.";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
 
         //-----------------------------------Patch Endpoints----------------------------------
 
