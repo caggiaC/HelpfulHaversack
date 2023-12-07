@@ -241,8 +241,6 @@ namespace Services.ContainerAPI.Controllers
                 _templates.Add(Mapper.DtoToItemTemplate(itemTemplateDto));
 
                 _response.Message = $"Updated {templateName}. Entire resource was affected.";
-
-
             }
             catch (Exception ex)
             {
