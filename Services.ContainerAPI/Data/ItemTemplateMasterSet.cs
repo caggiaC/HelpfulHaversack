@@ -63,7 +63,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
                 throw new ArgumentException("Bad template recieved.");
 
             if (!_templates.ContainsKey(template.Name))
-                throw new ArgumentException($"{template.Name} does not exist ");
+                throw new ArgumentException($"{template.Name} does not exist.");
 
             _templates[template.Name] = (ItemTemplate)template;
         }

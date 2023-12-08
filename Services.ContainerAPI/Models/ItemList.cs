@@ -41,6 +41,18 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
         {
             return _list.FindAll(u => u.Name.ToLower().Contains(itemName.ToLower()));
         }
+
+        public void UpdateItem(IItem item)
+        {
+            if (item.IsNull())
+                throw new ArgumentException("Bad item received.");
+
+            if (!_list.Contains(item))
+                throw new ArgumentException($"Item \"{item.DisplayName}\" with id \"{item.ItemId}\" does not exist within set.");
+
+            Item validatedItem = (Item)item;
+            _list[_list.IndexOf(validatedItem)] = validatedItem;
+        }
     
     }
 }

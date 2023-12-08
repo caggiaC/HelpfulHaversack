@@ -24,5 +24,17 @@ namespace Services.ContainerAPI.Models
             DisplayName = name;
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj == null) return false;
+            try { return ((Item)obj).ItemId == _id; }
+            catch { return false; }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
     }
 }

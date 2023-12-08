@@ -319,7 +319,7 @@ namespace Services.ContainerAPI.Controllers
 
                 _templates.UpdateTemplate(Mapper.DtoToItemTemplate(targetTemplate));
 
-                _response.Message = $"Updated {templateName}.";           
+                _response.Message = $"Updated template \"{templateName}\".";           
             }
             catch (Exception ex)
             {
@@ -345,7 +345,7 @@ namespace Services.ContainerAPI.Controllers
 
                 _treasuryStore.UpdateTreasury(Mapper.DtoToTreasury(targetTreasury));
 
-                _response.Message = $"Updated {targetTreasury.Name}.";
+                _response.Message = $"Updated treasury \"{targetTreasury.Name}\".";
             }
             catch (Exception ex)
             {
@@ -356,14 +356,24 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
-        //TODO
         [HttpPatch]
         [Route("treasuries/{treasuryId:guid}/inventory/{itemId:guid}")]
         public ResponseDto UpdateItemPartial(Guid treasuryId, Guid itemId, JsonPatchDocument<ItemDto> patchDto)
         {
             try
             {
-                throw new NotImplementedException();
+                if (patchDto == null)
+                    throw new BadHttpRequestException("Data Transfer Object was invalid.");
+
+                Treasury targetTreasury = _treasuryStore.GetTreasury(treasuryId);
+                ItemDto targetItem = Mapper.ItemToDto(targetTreasury.GetItem(itemId));
+
+                patchDto.ApplyTo(targetItem);
+
+                targetTreasury.UpdateItem(Mapper.DtoToItem(targetItem));
+
+                _response.Message = $"Updated item \"{targetItem.DisplayName}\" [id:{targetItem.ItemId}] " +
+                    $"in treasury \"{targetTreasury.Name}\" [id:{targetTreasury.Id}]";
             }
             catch (Exception ex)
             {

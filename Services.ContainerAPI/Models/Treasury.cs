@@ -63,15 +63,21 @@ namespace Services.ContainerAPI.Models
             return _inventory.GetAllItems();
         }
 
-        public bool PatchItem()
+        public void UpdateItem(IItem item)
         {
-            throw new NotImplementedException();
+            _inventory.UpdateItem(item);
         }
 
         public override bool Equals(Object? obj)
         {
-            try { return ((Treasury)obj).Id == _id; }
+            if (obj == null) return false;
+            try{ return ((Treasury)obj).Id == _id; }
             catch { return false; } 
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
 
     }
