@@ -54,6 +54,30 @@ namespace Services.ContainerAPI.Data
             _treasuries.First(t => t.Id == treasuryId).RemoveItem(itemId);
         }
 
+        public void UpdateTreasury(Treasury treasury)
+        {
+            if(!_treasuries.Contains(treasury))
+                throw new ArgumentException($"Treasury with id {treasury.Id} does not exist.");
+
+            _treasuries[_treasuries.IndexOf(treasury)] = treasury;
+        }
+
+        public bool Contains(Treasury treasury)
+        {
+            foreach(Treasury t in _treasuries)
+                if(t.Id == treasury.Id) return true;
+
+            return false;
+        }
+
+        public bool Contains(Guid treasuryId)
+        {
+            foreach(Treasury t in _treasuries)
+                if(t.Id == treasuryId) return true;
+
+            return false;
+        }
+
         private void SeedList()
         {
             Treasury temp = new()

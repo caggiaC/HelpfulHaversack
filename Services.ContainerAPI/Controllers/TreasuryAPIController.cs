@@ -228,7 +228,6 @@ namespace Services.ContainerAPI.Controllers
 
 
         //-----------------------------------Put Endpoints------------------------------------
-        //TODO
         [HttpPut]
         [Route("templates/{templateName}")]
         public ResponseDto UpdateItemTemplate(string templateName, [FromBody] ItemTemplateDto itemTemplateDto)
@@ -252,7 +251,6 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
-        //TODO
         [HttpPut]
         [Route("treasuries/{treasuryId:guid}")]
         public ResponseDto UpdateTreasury(Guid treasuryId, [FromBody] TreasuryDto treasuryDto)
@@ -277,7 +275,6 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
-        //TODO
         [HttpPut]
         [Route("treasuries/{treasuryId:guid}/inventory/{itemId:guid}")]
         public ResponseDto UpdateItem(Guid treasuryId, Guid itemId, [FromBody] ItemDto itemDto)
@@ -311,7 +308,18 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                throw new NotImplementedException();
+                if(patchDto == null || _templates.GetTemplate(templateName).IsNull())
+                    throw new BadHttpRequestException($"Template \"{templateName}\" does not exist " +
+                        "or Data Transfer Object was invalid.");
+
+                ItemTemplateDto targetTemplate = Mapper.ItemTemplateToDto(
+                    (ItemTemplate)_templates.GetTemplate(templateName));
+
+                patchDto.ApplyTo(targetTemplate);
+
+                _templates.UpdateTemplate(Mapper.DtoToItemTemplate(targetTemplate));
+
+                _response.Message = $"Updated {templateName}.";           
             }
             catch (Exception ex)
             {
@@ -328,7 +336,16 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                throw new NotImplementedException();
+                if (patchDto == null || !_treasuryStore.Contains(treasuryId))
+                    throw new BadHttpRequestException("Data Transfer Object was invalid.");
+
+                TreasuryDto targetTreasury = Mapper.TreasuryToDto(_treasuryStore.GetTreasury(treasuryId));
+
+                patchDto.ApplyTo(targetTreasury);
+
+                _treasuryStore.UpdateTreasury(Mapper.DtoToTreasury(targetTreasury));
+
+                _response.Message = $"Updated {targetTreasury.Name}.";
             }
             catch (Exception ex)
             {
@@ -339,6 +356,7 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
+        //TODO
         [HttpPatch]
         [Route("treasuries/{treasuryId:guid}/inventory/{itemId:guid}")]
         public ResponseDto UpdateItemPartial(Guid treasuryId, Guid itemId, JsonPatchDocument<ItemDto> patchDto)

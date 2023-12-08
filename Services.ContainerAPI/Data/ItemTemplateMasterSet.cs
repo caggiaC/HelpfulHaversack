@@ -1,5 +1,6 @@
 ﻿
 using HelpfulHaversack.Services.ContainerAPI.Models;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Data
 {
@@ -54,6 +55,17 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
                 throw new ArgumentException($"Template with the name \"{name}\" was not found.");
 
             _templates.Remove(name);
+        }
+
+        public void UpdateTemplate(IItemTemplate template)
+        {
+            if (template.IsNull())
+                throw new ArgumentException("Bad template recieved.");
+
+            if (!_templates.ContainsKey(template.Name))
+                throw new ArgumentException($"{template.Name} does not exist ");
+
+            _templates[template.Name] = (ItemTemplate)template;
         }
 
         private void SeedList()
