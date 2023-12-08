@@ -228,6 +228,7 @@ namespace Services.ContainerAPI.Controllers
 
 
         //-----------------------------------Put Endpoints------------------------------------
+        //TODO
         [HttpPut]
         [Route("templates/{templateName}")]
         public ResponseDto UpdateItemTemplate(string templateName, [FromBody] ItemTemplateDto itemTemplateDto)
@@ -251,6 +252,7 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
+        //TODO
         [HttpPut]
         [Route("treasuries/{treasuryId:guid}")]
         public ResponseDto UpdateTreasury(Guid treasuryId, [FromBody] TreasuryDto treasuryDto)
@@ -275,8 +277,9 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
+        //TODO
         [HttpPut]
-        [Route("treasuries/{treasuryId:guid}/{itemId:guid}")]
+        [Route("treasuries/{treasuryId:guid}/inventory/{itemId:guid}")]
         public ResponseDto UpdateItem(Guid treasuryId, Guid itemId, [FromBody] ItemDto itemDto)
         {
             try
@@ -304,7 +307,7 @@ namespace Services.ContainerAPI.Controllers
         //-----------------------------------Patch Endpoints----------------------------------
         [HttpPatch]
         [Route("templates/{templateName}")]
-        public ResponseDto UpdateItemTemplatePartial(string templateName, [FromBody] ItemTemplateDto templateDto)
+        public ResponseDto UpdateItemTemplatePartial(string templateName, JsonPatchDocument<ItemTemplateDto> patchDto)
         {
             try
             {
@@ -321,7 +324,7 @@ namespace Services.ContainerAPI.Controllers
 
         [HttpPatch]
         [Route("treasuries/{treasuryId:guid}")]
-        public ResponseDto UpdateTreasuryPartial(Guid treasuryId, [FromBody] TreasuryDto treasuryDto)
+        public ResponseDto UpdateTreasuryPartial(Guid treasuryId, JsonPatchDocument<TreasuryDto> patchDto)
         {
             try
             {
@@ -338,7 +341,7 @@ namespace Services.ContainerAPI.Controllers
 
         [HttpPatch]
         [Route("treasuries/{treasuryId:guid}/inventory/{itemId:guid}")]
-        public ResponseDto UpdateItemPartial(Guid treasuryId, Guid itemId, [FromBody] ItemDto itemDto)
+        public ResponseDto UpdateItemPartial(Guid treasuryId, Guid itemId, JsonPatchDocument<ItemDto> patchDto)
         {
             try
             {
