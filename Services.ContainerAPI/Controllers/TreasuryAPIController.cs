@@ -302,7 +302,56 @@ namespace Services.ContainerAPI.Controllers
 
 
         //-----------------------------------Patch Endpoints----------------------------------
+        [HttpPatch]
+        [Route("templates/{templateName}")]
+        public ResponseDto UpdateItemTemplatePartial(string templateName, [FromBody] ItemTemplateDto templateDto)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
 
+            return _response;
+        }
+
+        [HttpPatch]
+        [Route("treasuries/{treasuryId:guid}")]
+        public ResponseDto UpdateTreasuryPartial(Guid treasuryId, [FromBody] TreasuryDto treasuryDto)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
+        [HttpPatch]
+        [Route("treasuries/{treasuryId:guid}/inventory/{itemId:guid}")]
+        public ResponseDto UpdateItemPartial(Guid treasuryId, Guid itemId, [FromBody] ItemDto itemDto)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
 
         //-----------------------------------Delete Endpoints---------------------------------
         [HttpDelete]
