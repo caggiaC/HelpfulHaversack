@@ -13,10 +13,10 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
         private ItemTemplateMasterSet()
         {
             //Seed list; temporary for development
-            SeedList();
-            WriteToFile("./Data/");
+            //SeedList();
 
             //Load template list from file
+            LoadFromFile("./Data/");
 
         }//End Constructor
 
@@ -111,9 +111,16 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
 
         private static void WriteToFile(string path)
         {
-            using StreamWriter outputFile = new(Path.Combine(path, "Templates.txt"));
-            foreach (ItemTemplate entry in _templates.Values)
-                outputFile.WriteLine(JsonSerializer.Serialize(entry));
+            JsonFileHandler.WriteCollectionToFile(Path.Combine(path, "Templates.txt"), _templates.Values);
+        }
+
+        private static void LoadFromFile(string path)
+        { 
+            foreach (ItemTemplate template in
+                JsonFileHandler.GetFileContents<ItemTemplate>(Path.Combine(path, "Templates.txt")))
+            {
+                _templates.Add(template.Name, template);
+            }
         }
     }
 }
