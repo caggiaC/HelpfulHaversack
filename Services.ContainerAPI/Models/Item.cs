@@ -35,6 +35,5 @@ namespace Services.ContainerAPI.Models
         {
             return base.GetHashCode();
         }
-
     }
 }

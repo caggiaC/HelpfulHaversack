@@ -384,6 +384,31 @@ namespace Services.ContainerAPI.Controllers
             return _response;
         }
 
+        [HttpPatch]
+        [Route("treasuries/{srcTreasuryId:guid}/inventory/{itemId:guid};sendTo={destTreasuryId:guid}")]
+        public ResponseDto MoveItem(Guid srcTreasuryId, Guid itemId, Guid destTreasuryId)
+        {
+            try
+            {
+                if (!(_treasuryStore.Contains(srcTreasuryId) && _treasuryStore.Contains(destTreasuryId)))
+                    throw new BadHttpRequestException("One or more requested resources do not exist.");
+
+                var srcTreasury = _treasuryStore.GetTreasury(srcTreasuryId);
+                var destTreasury = _treasuryStore.GetTreasury(destTreasuryId);
+
+                destTreasury.AddItem(srcTreasury.RemoveItem(itemId));
+
+                _response.Message = $"Item was moved from \"{srcTreasury.Name}\" to \"{destTreasury.Name}\"";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
         //-----------------------------------Delete Endpoints---------------------------------
         [HttpDelete]
         [Route("treasuries/{treasuryId:guid}")]
