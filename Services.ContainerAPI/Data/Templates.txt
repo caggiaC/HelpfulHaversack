@@ -1,0 +1,4 @@
+{"Name":"Longsword","Description":"A versatile melee weapon.","Weight":3,"Value":15,"Rarity":0,"Type":9}
+{"Name":"Dagger","Description":"A simple melee weapon.","Weight":1,"Value":2,"Rarity":0,"Type":9}
+{"Name":"Shortbow","Description":"A simple ranged weapon.","Weight":2,"Value":25,"Rarity":0,"Type":9}
+{"Name":"Necklace","Description":"An ornate necklace.","Weight":0.1,"Value":50,"Rarity":0,"Type":2}

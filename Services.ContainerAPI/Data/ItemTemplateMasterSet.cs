@@ -1,6 +1,7 @@
 ﻿
 using HelpfulHaversack.Services.ContainerAPI.Models;
 using Microsoft.AspNetCore.JsonPatch;
+using System.Text.Json;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Data
 {
@@ -12,7 +13,8 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
         private ItemTemplateMasterSet()
         {
             //Seed list; temporary for development
-            SeedList();     
+            SeedList();
+            WriteToFile("./Data/");
 
             //Load template list from file
 
@@ -107,5 +109,11 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
             });
         }
 
+        private static void WriteToFile(string path)
+        {
+            using StreamWriter outputFile = new(Path.Combine(path, "Templates.txt"));
+            foreach (ItemTemplate entry in _templates.Values)
+                outputFile.WriteLine(JsonSerializer.Serialize(entry));
+        }
     }
 }
