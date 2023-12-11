@@ -1,0 +1,2 @@
+{"Id":"7428f1c2-18b5-4323-97fb-0627d9f60660","Name":"Treasure Chest","PP":0,"GP":100,"EP":0,"SP":200,"CP":500}
+{"Id":"2684bafa-e775-4ef6-9bb6-c0aea73b5440","Name":"Bag of Holding","PP":0,"GP":0,"EP":0,"SP":0,"CP":0}

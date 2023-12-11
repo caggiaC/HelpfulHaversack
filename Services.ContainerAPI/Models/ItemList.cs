@@ -1,15 +1,27 @@
-﻿using Services.ContainerAPI.Models;
+﻿using Newtonsoft.Json;
+using Services.ContainerAPI.Models;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Models
 {
     public class ItemList
     {
+        [JsonProperty]
         private readonly List<Item> _list = new();
 
-        public void Add(IItem item)
+        public ItemList() { }
+
+        [JsonConstructor]
+        public ItemList(List<Item> Items)
         {
-            if(!item.IsNull())
-                _list.Add((Item)item);
+            _list = Items;
+        }
+
+        public List<Item> Items { get { return _list; } }
+
+        public void Add(Item item)
+        {
+            if(item != null)
+                _list.Add(item);
         }
 
         public Item Remove(Item item)
@@ -25,9 +37,11 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
             return targetItem;
         }
 
-        public bool Contains(IItem item)
+        public bool Contains(Item item)
         {
-            return !item.IsNull() && _list.Contains(item);
+            if(item != null)
+                return _list.Contains(item);
+            return false;
         }
 
         public Item GetItem(Guid id)
@@ -42,10 +56,10 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
             return _list.FindAll(u => u.Name.ToLower().Contains(itemName.ToLower()));
         }
 
-        public void UpdateItem(IItem item)
+        public void UpdateItem(Item item)
         {
-            if (item.IsNull())
-                throw new ArgumentException("Bad item received.");
+            if (item == null)
+                throw new ArgumentException("Received Item was null.");
 
             if (!_list.Contains(item))
                 throw new ArgumentException($"Item \"{item.DisplayName}\" with id \"{item.ItemId}\" does not exist within set.");

@@ -1,10 +1,13 @@
 ﻿using HelpfulHaversack.Services.ContainerAPI.Models;
+using Newtonsoft.Json;
 
 namespace Services.ContainerAPI.Models
 {
     public class Treasury
     {
+        [JsonProperty]
         private readonly Guid _id;
+        [JsonProperty]
         private readonly ItemList _inventory = new();
 
         public Guid Id { get { return _id; } }
@@ -22,9 +25,10 @@ namespace Services.ContainerAPI.Models
             _id = Guid.NewGuid();
         }
 
-        public Treasury(Guid id)
+        [JsonConstructor]
+        public Treasury(Guid Id)
         {
-            _id = id;
+            _id = Id;
         }
 
         public void AddItem(IItem item)

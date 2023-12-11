@@ -32,8 +32,9 @@ namespace Services.ContainerAPI.Util
         //Dto => Item
         public static Item DtoToItem(ItemDto dto)
         {
-            return new Item(dto.Name, dto.ItemId)
+            return new Item(dto.ItemId)
             {
+                Name = dto.Name,
                 DisplayName = dto.DisplayName,
                 Description = dto.Description,
                 Weight = dto.Weight,

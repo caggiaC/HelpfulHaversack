@@ -15,6 +15,7 @@ namespace Services.ContainerAPI.Data
         {
             //Seed list; temporary for development
             SeedList();
+            WriteToFile("./Data/");
 
             //Load treasuries from file
         }
@@ -105,6 +106,16 @@ namespace Services.ContainerAPI.Data
                 _templates.GetTemplate("Longsword").CreateItemFrom()
             });
             _treasuries.Add(temp);
+        }
+
+        private static void WriteToFile(string path)
+        {
+            JsonFileHandler.WriteCollectionToFile(Path.Combine(path, "Treasuries.txt"), _treasuries);
+        }
+
+        private static void ReadFromFile(string path)
+        {
+
         }
     }
 }

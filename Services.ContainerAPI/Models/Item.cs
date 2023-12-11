@@ -1,27 +1,29 @@
 ﻿using HelpfulHaversack.Services.ContainerAPI.Models;
+using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
 namespace Services.ContainerAPI.Models
 {
-    public class Item : ItemTemplate, IItem
+    public class Item : ItemTemplate
     {
+        [JsonProperty]
         private readonly Guid _id;
 
         [Key]
         public Guid ItemId { get { return _id; } }
 
-        public string DisplayName { get; set; }
+        public new string Name { get; set; } = "A New Item";
+        public string DisplayName { get; set; } = "A New Item";
 
-        public Item(string name) : base(name)
+        public Item() : base ("Item Instance")
         {
             _id = Guid.NewGuid();
-            DisplayName = name;
         }
 
-        public Item(string name, Guid guid) : base(name) 
+        [JsonConstructor]
+        public Item(Guid ItemId) : base("Item Instance")
         {
-            _id = guid;
-            DisplayName = name;
+            _id = ItemId;
         }
 
         public override bool Equals(object? obj)

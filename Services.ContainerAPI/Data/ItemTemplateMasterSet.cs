@@ -1,7 +1,6 @@
 ﻿
 using HelpfulHaversack.Services.ContainerAPI.Models;
-using Microsoft.AspNetCore.JsonPatch;
-using System.Text.Json;
+
 
 namespace HelpfulHaversack.Services.ContainerAPI.Data
 {
@@ -14,6 +13,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
         {
             //Seed list; temporary for development
             //SeedList();
+            //WriteToFile("./Data/");
 
             //Load template list from file
             LoadFromFile("./Data/");

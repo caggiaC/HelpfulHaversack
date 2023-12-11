@@ -30,7 +30,6 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
             }
 
             return deseralizedValues;
-
         }
     }
 }
