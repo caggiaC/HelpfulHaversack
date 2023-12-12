@@ -14,17 +14,18 @@ namespace Services.ContainerAPI.Data
         private TreasuryStore()
         {
             //Seed list; temporary for development
-            SeedList();
-            WriteToFile("./Data/");
+            //SeedList();
+            //WriteToFile("./Data/");
 
             //Load treasuries from file
+            ReadFromFile("./Data/");
         }
 
         public static TreasuryStore Instance { get { return _instance.Value; } }
 
         public Treasury GetTreasury(Guid id)
         {
-            return _treasuries.First(t => t.Id == id);
+            return _treasuries.First(t => t.TreasuryId == id);
         }
 
         public List<Treasury> GetAllTreasuries() { return _treasuries; }
@@ -42,7 +43,7 @@ namespace Services.ContainerAPI.Data
 
         public void RemoveTreasury(Guid treasuryId)
         {
-            _treasuries.Remove(_treasuries.First(x => x.Id == treasuryId));
+            _treasuries.Remove(_treasuries.First(x => x.TreasuryId == treasuryId));
         }
 
         public void RemoveTreasury(Treasury treasury)
@@ -52,13 +53,13 @@ namespace Services.ContainerAPI.Data
 
         public void RemoveItemFromTreasury(Guid treasuryId, Guid itemId)
         {
-            _treasuries.First(t => t.Id == treasuryId).RemoveItem(itemId);
+            _treasuries.First(t => t.TreasuryId == treasuryId).RemoveItem(itemId);
         }
 
         public void UpdateTreasury(Treasury treasury)
         {
             if(!_treasuries.Contains(treasury))
-                throw new ArgumentException($"Treasury with id {treasury.Id} does not exist.");
+                throw new ArgumentException($"Treasury with id {treasury.TreasuryId} does not exist.");
 
             _treasuries[_treasuries.IndexOf(treasury)] = treasury;
         }
@@ -66,7 +67,7 @@ namespace Services.ContainerAPI.Data
         public bool Contains(Treasury treasury)
         {
             foreach(Treasury t in _treasuries)
-                if(t.Id == treasury.Id) return true;
+                if(t.TreasuryId == treasury.TreasuryId) return true;
 
             return false;
         }
@@ -74,7 +75,7 @@ namespace Services.ContainerAPI.Data
         public bool Contains(Guid treasuryId)
         {
             foreach(Treasury t in _treasuries)
-                if(t.Id == treasuryId) return true;
+                if(t.TreasuryId == treasuryId) return true;
 
             return false;
         }
@@ -83,28 +84,32 @@ namespace Services.ContainerAPI.Data
         {
             Treasury temp = new()
             {
-                Name = "Treasure Chest",
+                Name = "Mysterious Chest",
                 GP = 100,
                 SP = 200,
                 CP = 500
             };
-            temp.AddItems(new List<IItem>
-            {
-                _templates.GetTemplate("Dagger").CreateItemFrom(),
-                _templates.GetTemplate("Dagger").CreateItemFrom(),
-                _templates.GetTemplate("Necklace").CreateItemFrom(),
-                _templates.GetTemplate("Fake Item").CreateItemFrom(),
-            });
+
+            ItemTemplate? TEMPlate = _templates.GetTemplate("Dagger");
+            if (TEMPlate != null) temp.AddItem(TEMPlate.CreateItemFrom());
+
+            TEMPlate = _templates.GetTemplate("Dagger");
+            if (TEMPlate != null) temp.AddItem(TEMPlate.CreateItemFrom());
+
+            TEMPlate = _templates.GetTemplate("Necklace");
+            if (TEMPlate != null) temp.AddItem(TEMPlate.CreateItemFrom());
+
             _treasuries.Add(temp);
+
 
             temp = new()
             {
                 Name = "Bag of Holding",
             };
-            temp.AddItems(new List<IItem>
-            {
-                _templates.GetTemplate("Longsword").CreateItemFrom()
-            });
+
+            TEMPlate = _templates.GetTemplate("Longsword");
+            if (TEMPlate != null) temp.AddItem(TEMPlate.CreateItemFrom());
+
             _treasuries.Add(temp);
         }
 
@@ -115,7 +120,11 @@ namespace Services.ContainerAPI.Data
 
         private static void ReadFromFile(string path)
         {
-
+            foreach(Treasury treasury in 
+                JsonFileHandler.GetFileContents<Treasury>(Path.Combine(path, "Treasuries.txt")))
+            {
+                _treasuries.Add(treasury);
+            }
         }
     }
 }

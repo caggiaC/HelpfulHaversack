@@ -22,18 +22,18 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
 
         public static ItemTemplateMasterSet Instance { get { return _instance.Value; } }
 
-        public void Add(IItemTemplate template)
+        public void Add(ItemTemplate template)
         {
-            if (template.IsNull())
+            if (template == null)
                 throw new ArgumentException("Null template was recieved.");
                 
             if (_templates.ContainsKey(template.Name))
                 throw new ArgumentException("Template with this name already exists.");
 
-            _templates.Add(template.Name, (ItemTemplate)template);
+            _templates.Add(template.Name, template);
         }
 
-        public IItemTemplate GetTemplate(string name)
+        public ItemTemplate? GetTemplate(string name)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
             }
             catch(KeyNotFoundException)
             {
-                return NullItemTemplate.Instance;
+                return null;
             }
             
         }
@@ -59,15 +59,15 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
             _templates.Remove(name);
         }
 
-        public void UpdateTemplate(IItemTemplate template)
+        public void UpdateTemplate(ItemTemplate template)
         {
-            if (template.IsNull())
+            if (template == null)
                 throw new ArgumentException("Bad template recieved.");
 
             if (!_templates.ContainsKey(template.Name))
                 throw new ArgumentException($"{template.Name} does not exist.");
 
-            _templates[template.Name] = (ItemTemplate)template;
+            _templates[template.Name] = template;
         }
 
         private void SeedList()

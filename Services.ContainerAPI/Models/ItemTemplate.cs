@@ -56,8 +56,6 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
             };
         }
 
-        public bool IsNull() { return false; }
-
         //Other
         public enum ItemRarity
         {

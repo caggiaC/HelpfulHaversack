@@ -8,9 +8,9 @@ namespace Services.ContainerAPI.Models
         [JsonProperty]
         private readonly Guid _id;
         [JsonProperty]
-        private readonly ItemList _inventory = new();
+        private readonly List<Item> _inventory = new();
 
-        public Guid Id { get { return _id; } }
+        public Guid TreasuryId { get { return _id; } }
 
         public string Name { get; set; } = String.Empty;
 
@@ -31,51 +31,72 @@ namespace Services.ContainerAPI.Models
             _id = Id;
         }
 
-        public void AddItem(IItem item)
+        public void AddItem(Item? item)
         {
+            if(item != null)
             _inventory.Add(item);
         }
 
-        public void AddItems(IEnumerable<IItem> items)
+        public void AddItems(IEnumerable<Item?> items)
         {
             foreach (var item in items)
-                _inventory.Add(item);
+            {
+                if (item != null)
+                    _inventory.Add(item);
+            }        
         }
 
-        public Item RemoveItem(Item item)
+        public Item? RemoveItem(Item? item)
         {
-            return _inventory.Remove(item);
+            if (item != null)
+            {
+                var removedItem = _inventory.FirstOrDefault(i => i.ItemId == item.ItemId);
+                if(removedItem != null)
+                {
+                    _inventory.Remove(removedItem);
+                    return removedItem;
+                }
+            }                          
+            return null;
         }
 
-        public Item RemoveItem(Guid itemId)
+        public Item? RemoveItem(Guid itemId)
         {
-            return _inventory.Remove(itemId);
+            var removedItem = _inventory.First(i => i.ItemId == itemId);
+            if(removedItem != null)
+            {
+                _inventory.Remove(removedItem);
+                return removedItem;
+            }
+            return null;
         }
 
-        public Item GetItem(Guid itemId)
+        public Item? GetItem(Guid itemId)
         {
-            return _inventory.GetItem(itemId);
+            return _inventory.FirstOrDefault(i => i.ItemId == itemId);
         }
 
         public List<Item> GetItemsByName(string name)
         {
-            return _inventory.GetItemsByName(name);
+            return _inventory.FindAll(i => i.Name.ToLower().Contains(name.ToLower()));
         }
 
         public List<Item> GetAllItems()
         {
-            return _inventory.GetAllItems();
+            return _inventory;
         }
 
-        public void UpdateItem(IItem item)
+        public void UpdateItem(Item? item)
         {
-            _inventory.UpdateItem(item);
+            if(item == null) return;
+
+            _inventory[_inventory.IndexOf(item)] = item;
         }
 
         public override bool Equals(Object? obj)
         {
             if (obj == null) return false;
-            try{ return ((Treasury)obj).Id == _id; }
+            try{ return ((Treasury)obj).TreasuryId == _id; }
             catch { return false; } 
         }
 

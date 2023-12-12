@@ -97,7 +97,7 @@ namespace Services.ContainerAPI.Controllers
                 IEnumerable<Item> returnObjList = sourceTreasury.GetAllItems();
 
                 _response.Result = Mapper.ItemToDto(returnObjList);
-                _response.Message = $"Retrieved {returnObjList.Count()} items from {sourceTreasury.Name} [id:{sourceTreasury.Id}].";
+                _response.Message = $"Retrieved {returnObjList.Count()} items from {sourceTreasury.Name} [id:{sourceTreasury.TreasuryId}].";
             }
             catch (Exception ex)
             {
@@ -118,7 +118,7 @@ namespace Services.ContainerAPI.Controllers
                 Item returnObj = sourceTreasury.GetItem(itemId);
                 _response.Result = Mapper.ItemToDto(returnObj);
                 _response.Message = $"Successfully retrieved {returnObj.Name} [id:{returnObj.ItemId}] " +
-                    $"from {sourceTreasury.Name} [id:{sourceTreasury.Id}].";
+                    $"from {sourceTreasury.Name} [id:{sourceTreasury.TreasuryId}].";
             }
             catch (Exception ex)
             {
@@ -140,7 +140,7 @@ namespace Services.ContainerAPI.Controllers
                     sourceTreasury.GetItemsByName(itemName);
                 _response.Result = Mapper.ItemToDto(returnObjList);
                 _response.Message = $"Successfully retrieved {returnObjList.Count()} items " +
-                    $"from {sourceTreasury} [id:{sourceTreasury.Id}].";
+                    $"from {sourceTreasury} [id:{sourceTreasury.TreasuryId}].";
 
             }
             catch (Exception ex)
@@ -197,7 +197,7 @@ namespace Services.ContainerAPI.Controllers
             try
             {
                 _treasuryStore.AddTreasury(Mapper.DtoToTreasury(treasuryDto));
-                _response.Message = $"Created {treasuryDto.Name} [id:{treasuryDto.Id}]";
+                _response.Message = $"Created {treasuryDto.Name} [id:{treasuryDto.TreasuryId}]";
             }
             catch (Exception ex)
             {
@@ -257,13 +257,13 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                if (treasuryDto == null || treasuryDto.Id != treasuryId)
+                if (treasuryDto == null || treasuryDto.TreasuryId != treasuryId)
                     throw new BadHttpRequestException("Data Transfer Object was invalid or ID did not match route.");
 
                 _treasuryStore.RemoveTreasury(treasuryId);
                 _treasuryStore.AddTreasury(Mapper.DtoToTreasury(treasuryDto));
 
-                _response.Message = $"Updated {treasuryDto.Name} [id:{treasuryDto.Id}]. " +
+                _response.Message = $"Updated {treasuryDto.Name} [id:{treasuryDto.TreasuryId}]. " +
                     $"Entire resource was affected.";
             }
             catch (Exception ex)
@@ -308,12 +308,12 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                if(patchDto == null || _templates.GetTemplate(templateName).IsNull())
+                if(patchDto == null || _templates.GetTemplate(templateName) == null)
                     throw new BadHttpRequestException($"Template \"{templateName}\" does not exist " +
                         "or Data Transfer Object was invalid.");
 
                 ItemTemplateDto targetTemplate = Mapper.ItemTemplateToDto(
-                    (ItemTemplate)_templates.GetTemplate(templateName));
+                    _templates.GetTemplate(templateName));
 
                 patchDto.ApplyTo(targetTemplate);
 
@@ -373,7 +373,7 @@ namespace Services.ContainerAPI.Controllers
                 targetTreasury.UpdateItem(Mapper.DtoToItem(targetItem));
 
                 _response.Message = $"Updated item \"{targetItem.DisplayName}\" [id:{targetItem.ItemId}] " +
-                    $"in treasury \"{targetTreasury.Name}\" [id:{targetTreasury.Id}]";
+                    $"in treasury \"{targetTreasury.Name}\" [id:{targetTreasury.TreasuryId}]";
             }
             catch (Exception ex)
             {
@@ -457,7 +457,7 @@ namespace Services.ContainerAPI.Controllers
                 Item deletedItem = targetTreasury.RemoveItem(itemId);
 
                 _response.Message = $"Deleted {deletedItem.Name} [id:{deletedItem.ItemId}] from " +
-                    $"{targetTreasury.Name} [id:{targetTreasury.Id}]";
+                    $"{targetTreasury.Name} [id:{targetTreasury.TreasuryId}]";
             }
             catch (Exception ex)
             {
