@@ -1,15 +1,15 @@
-﻿using Services.ContainerAPI.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using Services.ContainerAPI.Models;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Models
 {
-    public class ItemTemplate : IItemTemplate
+    public class ItemTemplate
     {
+        [JsonProperty]
         private readonly string _name;
 
         //Properties
-        [Key]
-        public string Name { get { return _name; } } 
+        public string Name { get { return _name; } }
 
         public string Description { get; set; } = string.Empty;
 
@@ -22,17 +22,20 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
         public ItemType Type { get; set; } = ItemType.OTHER;
 
         //Constructors
-        public ItemTemplate(string name)
+        [JsonConstructor]
+        public ItemTemplate(string Name)
         {
-            _name = name;
+            _name = Name;
         }
 
 
         //Methods
-        public IItem CreateItemFrom()
+        public Item CreateItemFrom()
         {
-            return new Item(_name)
+            return new Item()
             {
+                Name = this.Name,
+                DisplayName = this.Name,
                 Description = this.Description,
                 Weight = this.Weight,
                 Value = this.Value,
@@ -52,8 +55,6 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
                 Type = item.Type,
             };
         }
-
-        public bool IsNull() { return false; }
 
         //Other
         public enum ItemRarity

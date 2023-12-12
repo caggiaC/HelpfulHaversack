@@ -1,5 +1,5 @@
-﻿using HelpfulHaversack.Services.ContainerAPI.Models;
-using System.Text.Json;
+﻿
+using Newtonsoft.Json;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Data
 {
@@ -9,7 +9,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
         {
             using StreamWriter outputFile = new(filePath);
             foreach (T entry in entries)
-                outputFile.WriteLine(JsonSerializer.Serialize(entry));
+                outputFile.WriteLine(JsonConvert.SerializeObject(entry));
         }
 
         public static List<T> GetFileContents<T>(string filePath)
@@ -23,14 +23,13 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
 
                 if (currentLine == null) continue;
 
-                T? current = JsonSerializer.Deserialize<T>(currentLine);
+                T? current = JsonConvert.DeserializeObject<T>(currentLine);
 
                 if(current != null)
                     deseralizedValues.Add(current);
             }
 
             return deseralizedValues;
-
         }
     }
 }
