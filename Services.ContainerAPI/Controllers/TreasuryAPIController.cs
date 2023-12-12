@@ -53,8 +53,18 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                _response.Result = Mapper.TreasuryToDto(_treasuryStore.GetTreasury(treasuryId));
-                _response.Message = "Retrieved treasury";
+                Treasury? retrievedTreasury = _treasuryStore.GetTreasury(treasuryId);
+                if(retrievedTreasury != null)
+                {
+                    _response.Result = Mapper.TreasuryToDto(retrievedTreasury);
+                    _response.Message = "Retrieved treasury";
+                }
+                else //retrievedTreasury == null
+                {
+                    _response.Result = null;
+                    _response.IsSuccess = false;
+                    _response.Message = $"Treasury with the Id \"{treasuryId}\" was not found.";
+                }   
             }
             catch (Exception ex)
             {
@@ -94,10 +104,20 @@ namespace Services.ContainerAPI.Controllers
             try
             {
                 var sourceTreasury = _treasuryStore.GetTreasury(treasuryId);
-                IEnumerable<Item> returnObjList = sourceTreasury.GetAllItems();
+                if(sourceTreasury != null)
+                {
+                    IEnumerable<Item> returnObjList = sourceTreasury.GetAllItems();
 
-                _response.Result = Mapper.ItemToDto(returnObjList);
-                _response.Message = $"Retrieved {returnObjList.Count()} items from {sourceTreasury.Name} [id:{sourceTreasury.TreasuryId}].";
+                    _response.Result = Mapper.ItemToDto(returnObjList);
+                    _response.Message = $"Retrieved {returnObjList.Count()} " +
+                        $"items from {sourceTreasury.Name} [id:{sourceTreasury.TreasuryId}].";
+                }
+                else //sourceTreasury == null
+                {
+                    _response.Result = null;
+                    _response.IsSuccess = false;
+                    _response.Message = $"Treasury with Id {treasuryId} was not found.";
+                }
             }
             catch (Exception ex)
             {
@@ -115,10 +135,29 @@ namespace Services.ContainerAPI.Controllers
             try
             {
                 var sourceTreasury = _treasuryStore.GetTreasury(treasuryId);
-                Item returnObj = sourceTreasury.GetItem(itemId);
-                _response.Result = Mapper.ItemToDto(returnObj);
-                _response.Message = $"Successfully retrieved {returnObj.Name} [id:{returnObj.ItemId}] " +
-                    $"from {sourceTreasury.Name} [id:{sourceTreasury.TreasuryId}].";
+                if(sourceTreasury != null)
+                {
+                    Item? returnObj = sourceTreasury.GetItem(itemId);
+                    if (returnObj != null)
+                    {
+                        _response.Result = Mapper.ItemToDto(returnObj);
+                        _response.Message = $"Successfully retrieved {returnObj.Name} [id:{returnObj.ItemId}] " +
+                            $"from {sourceTreasury.Name} [id:{sourceTreasury.TreasuryId}].";
+                    }
+                    else //returnObj == null
+                    {
+                        _response.Result = null;
+                        _response.IsSuccess = false;
+                        _response.Message = $"Item with the Id {itemId} was not found in " +
+                            $"Treasury \"{sourceTreasury.Name}\" [id:{treasuryId}]";
+                    }
+                }
+                else //sourceTreasury == null
+                {
+                    _response.Result = null;
+                    _response.IsSuccess = false;
+                    _response.Message = $"Treasury with the Id {treasuryId} was not found.";
+                }
             }
             catch (Exception ex)
             {
@@ -136,12 +175,20 @@ namespace Services.ContainerAPI.Controllers
             try
             {
                 var sourceTreasury = _treasuryStore.GetTreasury(treasuryId);
-                IEnumerable<Item> returnObjList =
-                    sourceTreasury.GetItemsByName(itemName);
-                _response.Result = Mapper.ItemToDto(returnObjList);
-                _response.Message = $"Successfully retrieved {returnObjList.Count()} items " +
-                    $"from {sourceTreasury} [id:{sourceTreasury.TreasuryId}].";
-
+                if(sourceTreasury != null)
+                {
+                    IEnumerable<Item> returnObjList =
+                   sourceTreasury.GetItemsByName(itemName);
+                    _response.Result = Mapper.ItemToDto(returnObjList);
+                    _response.Message = $"Successfully retrieved {returnObjList.Count()} items " +
+                        $"from {sourceTreasury} [id:{sourceTreasury.TreasuryId}] based on search \"{itemName}\".";
+                }
+                else //sourceTreasury == null
+                {
+                    _response.Result = null;
+                    _response.IsSuccess = false;
+                    _response.Message = $"Treasury with the Id {treasuryId} was not found.";
+                }
             }
             catch (Exception ex)
             {
@@ -285,11 +332,29 @@ namespace Services.ContainerAPI.Controllers
                     throw new BadHttpRequestException("Data Transfer Object was invalid or item ID did not match route.");
 
                 var targetTreasury = _treasuryStore.GetTreasury(itemId);
-                targetTreasury.RemoveItem(itemId);
-                targetTreasury.AddItem(Mapper.DtoToItem(itemDto));
+                if(targetTreasury != null)
+                {
+                    var removedItem = targetTreasury.RemoveItem(itemId);
+                    if (removedItem != null)
+                    {
+                        targetTreasury.AddItem(Mapper.DtoToItem(itemDto));
 
-                _response.Message = $"Updated {itemDto.Name} [id:{itemId} in {targetTreasury.Name} [id:{treasuryId}]. " +
-                    "Entire resource was affected.";
+                        _response.Message = $"Updated {itemDto.Name} [id:{itemId} in {targetTreasury.Name} [id:{treasuryId}]. " +
+                            "Entire resource was affected.";
+                    }
+                    else //removedItem == null
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = $"Item with the Id {itemId} was not found in " +
+                            $"Treasury \"{targetTreasury.Name}\" [id:{treasuryId}]";
+                    }
+                }
+                else //targetTreasury == null
+                {
+                    _response.Result = null;
+                    _response.IsSuccess = false;
+                    _response.Message = $"Treasury with the id {treasuryId} was not found.";
+                }  
             }
             catch (Exception ex)
             {
@@ -308,18 +373,27 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                if(patchDto == null || _templates.GetTemplate(templateName) == null)
-                    throw new BadHttpRequestException($"Template \"{templateName}\" does not exist " +
-                        "or Data Transfer Object was invalid.");
+                if(patchDto == null)
+                    throw new BadHttpRequestException("Data Transfer Object recieved was invalid");
 
-                ItemTemplateDto targetTemplate = Mapper.ItemTemplateToDto(
-                    _templates.GetTemplate(templateName));
+                var targetTemplate = _templates.GetTemplate(templateName);
 
-                patchDto.ApplyTo(targetTemplate);
+                if(targetTemplate != null)
+                {
+                    ItemTemplateDto targetTemplateDto = Mapper.ItemTemplateToDto(targetTemplate);
 
-                _templates.UpdateTemplate(Mapper.DtoToItemTemplate(targetTemplate));
+                    patchDto.ApplyTo(targetTemplateDto);
 
-                _response.Message = $"Updated template \"{templateName}\".";           
+                    _templates.UpdateTemplate(Mapper.DtoToItemTemplate(targetTemplateDto));
+
+                    _response.Message = $"Updated template \"{templateName}\".";
+                }
+                else //targetTemplate == null
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"Template with the name \"{templateName}\" was not found.";
+                }
+                           
             }
             catch (Exception ex)
             {
@@ -336,16 +410,26 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                if (patchDto == null || !_treasuryStore.Contains(treasuryId))
+                if (patchDto == null)
                     throw new BadHttpRequestException("Data Transfer Object was invalid.");
 
-                TreasuryDto targetTreasury = Mapper.TreasuryToDto(_treasuryStore.GetTreasury(treasuryId));
+                var targetTreasury = _treasuryStore.GetTreasury(treasuryId);
 
-                patchDto.ApplyTo(targetTreasury);
+                if(targetTreasury != null)
+                {
+                    TreasuryDto targetTreasuryDto = Mapper.TreasuryToDto(targetTreasury);
 
-                _treasuryStore.UpdateTreasury(Mapper.DtoToTreasury(targetTreasury));
+                    patchDto.ApplyTo(targetTreasuryDto);
 
-                _response.Message = $"Updated treasury \"{targetTreasury.Name}\".";
+                    _treasuryStore.UpdateTreasury(Mapper.DtoToTreasury(targetTreasuryDto));
+
+                    _response.Message = $"Updated treasury \"{targetTreasuryDto.Name}\".";
+                }
+                else //targetTreasury == null
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"Treasury with the Id {treasuryId} was not found.";
+                }     
             }
             catch (Exception ex)
             {
@@ -365,15 +449,32 @@ namespace Services.ContainerAPI.Controllers
                 if (patchDto == null)
                     throw new BadHttpRequestException("Data Transfer Object was invalid.");
 
-                Treasury targetTreasury = _treasuryStore.GetTreasury(treasuryId);
-                ItemDto targetItem = Mapper.ItemToDto(targetTreasury.GetItem(itemId));
+                Treasury? targetTreasury = _treasuryStore.GetTreasury(treasuryId);
+                if(targetTreasury != null)
+                {
+                    var targetItem = targetTreasury.GetItem(itemId);
+                    if(targetItem != null)
+                    {
+                        ItemDto targetItemDto = Mapper.ItemToDto(targetItem);
 
-                patchDto.ApplyTo(targetItem);
+                        patchDto.ApplyTo(targetItemDto);
 
-                targetTreasury.UpdateItem(Mapper.DtoToItem(targetItem));
+                        targetTreasury.UpdateItem(Mapper.DtoToItem(targetItemDto));
 
-                _response.Message = $"Updated item \"{targetItem.DisplayName}\" [id:{targetItem.ItemId}] " +
-                    $"in treasury \"{targetTreasury.Name}\" [id:{targetTreasury.TreasuryId}]";
+                        _response.Message = $"Updated item \"{targetItemDto.DisplayName}\" [id:{targetItemDto.ItemId}] " +
+                            $"in treasury \"{targetTreasury.Name}\" [id:{targetTreasury.TreasuryId}]";
+                    }
+                    else //targetItem == null
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = $"";
+                    }                    
+                }
+                else //targetTreasury == null
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"Treasury with the Id {treasuryId} was not found.";
+                }                
             }
             catch (Exception ex)
             {
@@ -390,15 +491,31 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                if (!(_treasuryStore.Contains(srcTreasuryId) && _treasuryStore.Contains(destTreasuryId)))
-                    throw new BadHttpRequestException("One or more requested resources do not exist.");
-
                 var srcTreasury = _treasuryStore.GetTreasury(srcTreasuryId);
                 var destTreasury = _treasuryStore.GetTreasury(destTreasuryId);
 
-                destTreasury.AddItem(srcTreasury.RemoveItem(itemId));
+                if (srcTreasury != null && destTreasury != null)
+                {
+                    var targetItem = srcTreasury.RemoveItem(itemId);
+                    if (targetItem != null)
+                    {
+                        destTreasury.AddItem(targetItem);
+                        _response.Message = $"Item was moved from \"{srcTreasury.Name}\" to \"{destTreasury.Name}\"";
+                    }
+                    else //targetItem == null
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = $"Item with the Id {itemId} was not found in " +
+                            $"the treasury \"{srcTreasury.Name}\" [id:{srcTreasuryId}].";
+                    }
+                }
+                else //srcTreasury and/or destTreasury is null
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "One or more requested treasuries was not found.";
+                }
 
-                _response.Message = $"Item was moved from \"{srcTreasury.Name}\" to \"{destTreasury.Name}\"";
+                
             }
             catch (Exception ex)
             {
@@ -416,9 +533,17 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                Treasury treasuryToDelete = _treasuryStore.GetTreasury(treasuryId);
-                _treasuryStore.RemoveTreasury(treasuryId);
-                _response.Message = $"Removed treasury {treasuryToDelete.Name} [id:{treasuryId}]";
+                var treasuryToDelete = _treasuryStore.GetTreasury(treasuryId);
+                if(treasuryToDelete != null)
+                {
+                    _treasuryStore.RemoveTreasury(treasuryId);
+                    _response.Message = $"Removed treasury {treasuryToDelete.Name} [id:{treasuryId}]";
+                }
+                else //treasuryToDelete == null
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"Treasury with the Id {treasuryId} was not found. Congratulations?";
+                }                
             }
             catch (Exception ex)
             {
@@ -453,11 +578,27 @@ namespace Services.ContainerAPI.Controllers
         {
             try
             {
-                Treasury targetTreasury = _treasuryStore.GetTreasury(treasuryId);
-                Item deletedItem = targetTreasury.RemoveItem(itemId);
-
-                _response.Message = $"Deleted {deletedItem.Name} [id:{deletedItem.ItemId}] from " +
-                    $"{targetTreasury.Name} [id:{targetTreasury.TreasuryId}]";
+                var targetTreasury = _treasuryStore.GetTreasury(treasuryId);
+                if(targetTreasury != null)
+                {
+                    var deletedItem = targetTreasury.RemoveItem(itemId);
+                    if(deletedItem != null)
+                    {
+                        _response.Message = $"Deleted {deletedItem.Name} [id:{deletedItem.ItemId}] from " +
+                                                $"{targetTreasury.Name} [id:{targetTreasury.TreasuryId}]";
+                    }
+                    else //deletedItem == null
+                    {
+                        _response.IsSuccess = false;
+                        _response.Message = $"Item with the Id {itemId} was not found in the treasury " +
+                            $"\"{targetTreasury.Name}\" [id:{treasuryId}]. Congratulations?";
+                    }                   
+                }
+                else //targetTreasury == null
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"Treasury with the Id {treasuryId} was not found.";
+                }             
             }
             catch (Exception ex)
             {

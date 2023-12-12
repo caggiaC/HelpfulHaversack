@@ -23,9 +23,9 @@ namespace Services.ContainerAPI.Data
 
         public static TreasuryStore Instance { get { return _instance.Value; } }
 
-        public Treasury GetTreasury(Guid id)
+        public Treasury? GetTreasury(Guid id)
         {
-            return _treasuries.First(t => t.TreasuryId == id);
+            return _treasuries.FirstOrDefault(t => t.TreasuryId == id);
         }
 
         public List<Treasury> GetAllTreasuries() { return _treasuries; }
