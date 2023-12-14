@@ -1,4 +1,4 @@
-{"_name":"Longsword","Name":"Longsword","Description":"A versatile melee weapon.","Weight":3.0,"Value":15.0,"Rarity":0,"Type":9}
+﻿{"_name":"Longsword","Name":"Longsword","Description":"A versatile melee weapon.","Weight":3.0,"Value":15.0,"Rarity":0,"Type":9}
 {"_name":"Dagger","Name":"Dagger","Description":"A simple melee weapon.","Weight":1.0,"Value":2.0,"Rarity":0,"Type":9}
 {"_name":"Shortbow","Name":"Shortbow","Description":"A simple ranged weapon.","Weight":2.0,"Value":25.0,"Rarity":0,"Type":9}
 {"_name":"Necklace","Name":"Necklace","Description":"An ornate necklace.","Weight":0.1,"Value":50.0,"Rarity":0,"Type":2}

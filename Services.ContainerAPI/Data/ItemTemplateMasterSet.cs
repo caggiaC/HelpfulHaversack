@@ -109,6 +109,11 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
             });
         }
 
+        public void Close()
+        {
+            WriteToFile("./Data/");
+        }
+
         private static void WriteToFile(string path)
         {
             JsonFileHandler.WriteCollectionToFile(Path.Combine(path, "Templates.txt"), _templates.Values);

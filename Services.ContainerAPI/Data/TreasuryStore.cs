@@ -80,6 +80,11 @@ namespace Services.ContainerAPI.Data
             return false;
         }
 
+        public void Close()
+        {
+            WriteToFile("./Data/");
+        }
+
         private void SeedList()
         {
             Treasury temp = new()
