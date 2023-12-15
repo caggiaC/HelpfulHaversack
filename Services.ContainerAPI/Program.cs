@@ -30,12 +30,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
+//AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
 
 app.Run();
 
-static void OnProcessExit(object? sender, EventArgs e)
-{
-    TreasuryStore.Instance.Close();
-    ItemTemplateMasterSet.Instance.Close();
-}
+//static void OnProcessExit(object? sender, EventArgs e)
+//{
+//    TreasuryStore.Instance.Close();
+//    ItemTemplateMasterSet.Instance.Close();
+//}
