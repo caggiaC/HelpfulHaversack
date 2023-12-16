@@ -109,7 +109,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
             });
         }
 
-        public void Close()
+        public void Save()
         {
             WriteToFile("./Data/");
         }

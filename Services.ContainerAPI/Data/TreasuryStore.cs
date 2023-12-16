@@ -80,7 +80,7 @@ namespace Services.ContainerAPI.Data
             return false;
         }
 
-        public void Close()
+        public void Save()
         {
             WriteToFile("./Data/");
         }

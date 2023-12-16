@@ -17,14 +17,20 @@ namespace Services.ContainerAPI.Controllers
         private readonly ResponseDto _response;
         private readonly ItemTemplateMasterSet _templates;
         private readonly TreasuryStore _treasuryStore;
+        private readonly TimedStateService _timedStateService;
 
         //Dependency Injection
 
+        //Constructor
         public TreasuryAPIController()
         {
             _response = new ResponseDto();
             _templates = ItemTemplateMasterSet.Instance;
             _treasuryStore = TreasuryStore.Instance;
+            _timedStateService = new();
+
+            _timedStateService.StartAsync(new CancellationToken());
+            
         }
         //End Dependency Injection
 
@@ -245,6 +251,7 @@ namespace Services.ContainerAPI.Controllers
             {
                 _treasuryStore.AddTreasury(Mapper.DtoToTreasury(treasuryDto));
                 _response.Message = $"Created {treasuryDto.Name} [id:{treasuryDto.TreasuryId}]";
+                _timedStateService.SetTreasuryStoreModified();
             }
             catch (Exception ex)
             {
@@ -263,6 +270,7 @@ namespace Services.ContainerAPI.Controllers
             {
                 _templates.Add(ItemTemplate.CreateTemplateFromItem(Mapper.DtoToItem(dto)));
                 _response.Message = $"Created template for {dto.Name}";
+                _timedStateService.SetTemplateSetModified();
             }
             catch (Exception ex)
             {
@@ -288,6 +296,7 @@ namespace Services.ContainerAPI.Controllers
                 _templates.Add(Mapper.DtoToItemTemplate(itemTemplateDto));
 
                 _response.Message = $"Updated {templateName}. Entire resource was affected.";
+                _timedStateService.SetTemplateSetModified();
             }
             catch (Exception ex)
             {
@@ -312,6 +321,7 @@ namespace Services.ContainerAPI.Controllers
 
                 _response.Message = $"Updated {treasuryDto.Name} [id:{treasuryDto.TreasuryId}]. " +
                     $"Entire resource was affected.";
+                _timedStateService.SetTreasuryStoreModified();
             }
             catch (Exception ex)
             {
@@ -341,6 +351,7 @@ namespace Services.ContainerAPI.Controllers
 
                         _response.Message = $"Updated {itemDto.Name} [id:{itemId} in {targetTreasury.Name} [id:{treasuryId}]. " +
                             "Entire resource was affected.";
+                        _timedStateService.SetTreasuryStoreModified();
                     }
                     else //removedItem == null
                     {
@@ -387,6 +398,7 @@ namespace Services.ContainerAPI.Controllers
                     _templates.UpdateTemplate(Mapper.DtoToItemTemplate(targetTemplateDto));
 
                     _response.Message = $"Updated template \"{templateName}\".";
+                    _timedStateService.SetTemplateSetModified();
                 }
                 else //targetTemplate == null
                 {
@@ -424,6 +436,7 @@ namespace Services.ContainerAPI.Controllers
                     _treasuryStore.UpdateTreasury(Mapper.DtoToTreasury(targetTreasuryDto));
 
                     _response.Message = $"Updated treasury \"{targetTreasuryDto.Name}\".";
+                    _timedStateService.SetTreasuryStoreModified();
                 }
                 else //targetTreasury == null
                 {
@@ -463,6 +476,7 @@ namespace Services.ContainerAPI.Controllers
 
                         _response.Message = $"Updated item \"{targetItemDto.DisplayName}\" [id:{targetItemDto.ItemId}] " +
                             $"in treasury \"{targetTreasury.Name}\" [id:{targetTreasury.TreasuryId}]";
+                        _timedStateService.SetTreasuryStoreModified();
                     }
                     else //targetItem == null
                     {
@@ -501,6 +515,7 @@ namespace Services.ContainerAPI.Controllers
                     {
                         destTreasury.AddItem(targetItem);
                         _response.Message = $"Item was moved from \"{srcTreasury.Name}\" to \"{destTreasury.Name}\"";
+                        _timedStateService.SetTreasuryStoreModified() ;
                     }
                     else //targetItem == null
                     {
@@ -538,6 +553,7 @@ namespace Services.ContainerAPI.Controllers
                 {
                     _treasuryStore.RemoveTreasury(treasuryId);
                     _response.Message = $"Removed treasury {treasuryToDelete.Name} [id:{treasuryId}]";
+                    _timedStateService.SetTreasuryStoreModified() ;
                 }
                 else //treasuryToDelete == null
                 {
@@ -562,6 +578,7 @@ namespace Services.ContainerAPI.Controllers
             {
                 _templates.RemoveTemplate(templateName);
                 _response.Message = $"Deleted template for {templateName}";
+                _timedStateService.SetTemplateSetModified();
             }
             catch (Exception ex)
             {
@@ -586,6 +603,7 @@ namespace Services.ContainerAPI.Controllers
                     {
                         _response.Message = $"Deleted {deletedItem.Name} [id:{deletedItem.ItemId}] from " +
                                                 $"{targetTreasury.Name} [id:{targetTreasury.TreasuryId}]";
+                        _timedStateService.SetTreasuryStoreModified();
                     }
                     else //deletedItem == null
                     {
@@ -607,6 +625,72 @@ namespace Services.ContainerAPI.Controllers
             }
 
             return _response;
+        }
+
+
+        //Background Services
+        private class TimedStateService : IHostedService
+        {
+            private ItemTemplateMasterSet _templates;
+            private TreasuryStore _treasuries;
+            private Timer? _timer;
+            private bool _treasuryStoreModified;
+            private bool _templateMasterSetModified;
+            private bool _locked;
+
+            public TimedStateService() 
+            {
+                _templates = ItemTemplateMasterSet.Instance;
+                _treasuries = TreasuryStore.Instance;
+                _treasuryStoreModified = false;
+                _templateMasterSetModified = false;
+                _timer = null;
+                _locked = false;
+            }
+
+            public Task StartAsync(CancellationToken cancellationToken)
+            {
+                _timer = new Timer(SaveIfModified, null, TimeSpan.Zero, TimeSpan.FromSeconds(1));
+
+                return Task.CompletedTask;
+            }
+
+            private void SaveIfModified(object? state)
+            {
+                //Console.WriteLine($"Checked state {DateTime.Now} ({_templateMasterSetModified} | {_treasuryStoreModified})");
+                if (_templateMasterSetModified)
+                { 
+                    if(!_locked)
+                    {
+                        _locked = true;
+                        _templates.Save();
+                        _locked = false;
+                        _templateMasterSetModified = false;
+                    }
+                }
+
+                if(_treasuryStoreModified)
+                {
+                    if(!_locked)
+                    {
+                        _locked = true;
+                        _treasuries.Save();
+                        _locked = false;
+                        _treasuryStoreModified = false;
+                    }
+                }
+            }
+
+            public Task StopAsync(CancellationToken cancellationToken)
+            {
+                _timer?.Change(Timeout.Infinite, 0);
+
+                return Task.CompletedTask;
+            }
+
+            public void SetTreasuryStoreModified() { _treasuryStoreModified = true; }
+
+            public void SetTemplateSetModified() { _templateMasterSetModified = true; }
         }
     }
 }
