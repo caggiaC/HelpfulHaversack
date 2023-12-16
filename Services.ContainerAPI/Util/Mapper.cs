@@ -146,6 +146,60 @@ namespace Services.ContainerAPI.Util
             return returnList;
         }
 
+        //Character => Dto
+        public static CharacterDto CharacterToDto(Character character) 
+        {
+            return new CharacterDto()
+            {
+                CharacterId = character.CharacterId,
+                InventoryId = character.InventoryId,
+                MaxHP = character.MaxHP,
+                CurrentHp = character.CurrentHp,
+                ArmorClass = character.ArmorClass,
+                Str = character.Str,
+                Dex = character.Dex,
+                Con = character.Con,
+                Int = character.Int,
+                Wis = character.Wis,
+                Cha = character.Cha
+            };
+        }
+        public static List<CharacterDto> CharacterToDto(IEnumerable<Character> character_list)
+        {
+            List<CharacterDto> returnList = new();
+
+            foreach (Character character in character_list)
+                returnList.Add(CharacterToDto(character));
+
+            return returnList;
+        }
+
+        //Dto => Character
+        public static Character DtoToCharacter(CharacterDto dto)
+        {
+            return new Character(dto.CharacterId)
+            {
+                InventoryId = dto.InventoryId,
+                MaxHP = dto.MaxHP,
+                CurrentHp = dto.CurrentHp,
+                ArmorClass = dto.ArmorClass,
+                Str = dto.Str,
+                Dex = dto.Dex,
+                Con = dto.Con,
+                Int = dto.Int,
+                Wis = dto.Wis,
+                Cha = dto.Cha
+            };
+        }
+        public static List<Character> DtoToCharacter(IEnumerable<CharacterDto> dto_list)
+        {
+            List<Character> returnList = new();
+
+            foreach (CharacterDto dto in dto_list)
+                returnList.Add(DtoToCharacter(dto));
+
+            return returnList;
+        }
 
     }
 }
