@@ -244,14 +244,20 @@ namespace Services.ContainerAPI.Controllers
 
         //-----------------------------------Post Endpoints-----------------------------------
         [HttpPost]
-        [Route("create/treasury")]
-        public ResponseDto CreateTreasury([FromBody] TreasuryDto treasuryDto)
+        [Route("create/treasury:{treasuryName}")]
+        public ResponseDto CreateTreasury(string treasuryName)
         {
             try
             {
-                _treasuryStore.AddTreasury(Mapper.DtoToTreasury(treasuryDto));
-                _response.Message = $"Created {treasuryDto.Name} [id:{treasuryDto.TreasuryId}]";
-                _timedStateService.SetTreasuryStoreModified();
+                if (treasuryName == null)
+                    throw new ArgumentException("treasuryName must not be null");
+
+                Treasury newTreasury = new Treasury() { Name = treasuryName};
+
+                _treasuryStore.AddTreasury(newTreasury);
+
+                _response.Result = newTreasury;
+                _response.Message = $"Created new treasury with the name \"{treasuryName}\" [id:{newTreasury.TreasuryId}].";
             }
             catch (Exception ex)
             {
@@ -263,20 +269,24 @@ namespace Services.ContainerAPI.Controllers
         }
 
         [HttpPost]
-        [Route("create/template")]
-        public ResponseDto CreateItemTemplate([FromBody] ItemDto dto)
+        [Route("create/template:{templateName}")]
+        public ResponseDto CreateItemTemplate(string templateName, [FromBody] ItemTemplateDto dto)
         {
-            try
-            {
-                _templates.Add(ItemTemplate.CreateTemplateFromItem(Mapper.DtoToItem(dto)));
-                _response.Message = $"Created template for {dto.Name}";
-                _timedStateService.SetTemplateSetModified();
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
+            if (templateName != dto.Name)
+                throw new BadHttpRequestException("Template name did not match route.");
+
+                try
+                {   
+                    _templates.Add(Mapper.DtoToItemTemplate(dto));
+
+                    _response.Message = $"Created template for {dto.Name}";
+                    _timedStateService.SetTemplateSetModified();
+                }
+                catch (Exception ex)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = ex.Message;
+                }
 
             return _response;
         }
