@@ -5,17 +5,16 @@ using Services.ContainerAPI.Models.Dto;
 using Services.ContainerAPI.Data;
 using Services.ContainerAPI.Util;
 using HelpfulHaversack.Services.ContainerAPI.Data;
-using HelpfulHaversack.Services.ContainerAPI.Models;
 using HelpfulHaversack.Services.ContainerAPI.Models.Dto;
 
-namespace Services.ContainerAPI.Controllers
+namespace HelpfulHaversack.Services.ContainerAPI.Controllers
 {
     [Route("api/TreasuryAPI")]
     [ApiController]
     public class TreasuryAPIController
     {
         private readonly ResponseDto _response;
-        private readonly ItemTemplateMasterSet _templates;
+        private readonly ItemTemplateSet _templates;
         private readonly TreasuryStore _treasuryStore;
         private readonly TimedStateService _timedStateService;
 
@@ -25,12 +24,11 @@ namespace Services.ContainerAPI.Controllers
         public TreasuryAPIController()
         {
             _response = new ResponseDto();
-            _templates = ItemTemplateMasterSet.Instance;
+            _templates = ItemTemplateSet.Instance;
             _treasuryStore = TreasuryStore.Instance;
             _timedStateService = new();
 
-            _timedStateService.StartAsync(new CancellationToken());
-            
+            _timedStateService.StartAsync(new CancellationToken());  
         }
         //End Dependency Injection
 
@@ -641,19 +639,19 @@ namespace Services.ContainerAPI.Controllers
         //Background Services
         private class TimedStateService : IHostedService
         {
-            private ItemTemplateMasterSet _templates;
-            private TreasuryStore _treasuries;
+            private readonly ItemTemplateSet _templates;
+            private readonly TreasuryStore _treasuries;
             private Timer? _timer;
             private bool _treasuryStoreModified;
-            private bool _templateMasterSetModified;
+            private bool _templateSetModified;
             private bool _locked;
 
             public TimedStateService() 
             {
-                _templates = ItemTemplateMasterSet.Instance;
+                _templates = ItemTemplateSet.Instance;
                 _treasuries = TreasuryStore.Instance;
                 _treasuryStoreModified = false;
-                _templateMasterSetModified = false;
+                _templateSetModified = false;
                 _timer = null;
                 _locked = false;
             }
@@ -668,14 +666,14 @@ namespace Services.ContainerAPI.Controllers
             private void SaveIfModified(object? state)
             {
                 //Console.WriteLine($"Checked state {DateTime.Now} ({_templateMasterSetModified} | {_treasuryStoreModified})");
-                if (_templateMasterSetModified)
+                if (_templateSetModified)
                 { 
                     if(!_locked)
                     {
                         _locked = true;
                         _templates.Save();
                         _locked = false;
-                        _templateMasterSetModified = false;
+                        _templateSetModified = false;
                     }
                 }
 
@@ -700,7 +698,7 @@ namespace Services.ContainerAPI.Controllers
 
             public void SetTreasuryStoreModified() { _treasuryStoreModified = true; }
 
-            public void SetTemplateSetModified() { _templateMasterSetModified = true; }
+            public void SetTemplateSetModified() { _templateSetModified = true; }
         }
     }
 }

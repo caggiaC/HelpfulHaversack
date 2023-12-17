@@ -4,12 +4,12 @@ using HelpfulHaversack.Services.ContainerAPI.Models;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Data
 {
-    public sealed class ItemTemplateMasterSet
+    public sealed class ItemTemplateSet
     {
         private static readonly Dictionary<string,ItemTemplate> _templates = new();
-        private static readonly Lazy<ItemTemplateMasterSet> _instance = new(() => new ItemTemplateMasterSet());
+        private static readonly Lazy<ItemTemplateSet> _instance = new(() => new ItemTemplateSet());
 
-        private ItemTemplateMasterSet()
+        private ItemTemplateSet()
         {
             //Seed list; temporary for development
             //SeedList();
@@ -20,7 +20,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
 
         }//End Constructor
 
-        public static ItemTemplateMasterSet Instance { get { return _instance.Value; } }
+        public static ItemTemplateSet Instance { get { return _instance.Value; } }
 
         public void Add(ItemTemplate template)
         {

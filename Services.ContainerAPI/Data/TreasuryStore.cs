@@ -7,7 +7,7 @@ namespace Services.ContainerAPI.Data
     public sealed class TreasuryStore
     {
         private static readonly List<Treasury> _treasuries = new();
-        private readonly ItemTemplateMasterSet _templates = ItemTemplateMasterSet.Instance;
+        private readonly ItemTemplateSet _templates = ItemTemplateSet.Instance;
 
         private static readonly Lazy<TreasuryStore> _instance = new(() => new TreasuryStore());
 
