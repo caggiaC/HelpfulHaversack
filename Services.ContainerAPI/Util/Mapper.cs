@@ -7,7 +7,13 @@ namespace Services.ContainerAPI.Util
 {
     public static class Mapper
     {
-        //Item => Dto
+        //---------------------------------| Item => Dto |---------------------------------
+
+        /// <summary>
+        /// Takes an Item and returns a DTO for that item.
+        /// </summary>
+        /// <param name="item">The Item to be converted into a DTO.</param>
+        /// <returns>A DTO of the passed Item.</returns>
         public static ItemDto ItemToDto(Item item)
         {
             return new ItemDto
@@ -19,6 +25,12 @@ namespace Services.ContainerAPI.Util
                 Value = item.Value,
             };
         }
+
+        /// <summary>
+        /// Takes a List of type Item and returns a List of DTOs for those Items.
+        /// </summary>
+        /// <param name="item">The List of Items to be converted into DTOs.</param>
+        /// <returns>A List of DTOs of the passed items.</returns>
         public static List<ItemDto> ItemToDto(IEnumerable<Item> item_list)
         {
             List<ItemDto> returnList = new();
@@ -29,7 +41,13 @@ namespace Services.ContainerAPI.Util
             return returnList;
         }
 
-        //Dto => Item
+        //---------------------------------| Dto => Item |---------------------------------
+
+        /// <summary>
+        /// Takes an ItemDto and returns an Item constructed from that DTO.
+        /// </summary>
+        /// <param name="dto">The DTO to convert to an Item.</param>
+        /// <returns>An Item constructed from the DTO.</returns>
         public static Item DtoToItem(ItemDto dto)
         {
             return new Item(dto.ItemId)
@@ -41,6 +59,12 @@ namespace Services.ContainerAPI.Util
                 Value = dto.Value,
             };
         }
+
+        /// <summary>
+        /// Takes a List of type ItemDto and returns a List of Items constructed from those DTOs.
+        /// </summary>
+        /// <param name="item">The List of type ItemDto to be converted into Items.</param>
+        /// <returns>A List of DTOs of the passed items.</returns>
         public static List<Item> DtoToItem(IEnumerable<ItemDto> dto_list)
         {
             List<Item> returnList = new();
@@ -51,7 +75,13 @@ namespace Services.ContainerAPI.Util
             return returnList;
         }
 
-        //Treasury => Dto
+        //---------------------------------| Treasury => Dto |-----------------------------
+
+        /// <summary>
+        /// Takes a Treasury and returns a DTO for that Treasury.
+        /// </summary>
+        /// <param name="treasury">The Treasury to convert into a DTO.</param>
+        /// <returns>A DTO of the passed treasury.</returns>
         public static TreasuryDto TreasuryToDto(Treasury treasury)
         {
             return new TreasuryDto
@@ -66,6 +96,12 @@ namespace Services.ContainerAPI.Util
                 Inventory = ItemToDto(treasury.GetAllItems())
             };
         }
+
+        /// <summary>
+        /// Takes a List of type Treasury and returns a List of DTOs for those treasuries.
+        /// </summary>
+        /// <param name="item">The List of type Treasury to be converted into DTOs.</param>
+        /// <returns>A List of type TreasuryDto for those treasuries.</returns>
         public static List<TreasuryDto> TreasuryToDto(IEnumerable<Treasury> treasury_list)
         {
             List<TreasuryDto> returnList = new();
@@ -76,7 +112,13 @@ namespace Services.ContainerAPI.Util
             return returnList;
         }
 
-        //Dto => Treasury
+        //---------------------------------| Dto => Treasury |-----------------------------
+
+        /// <summary>
+        /// Takes a TreasuryDto and returns a Treasury constructed from that DTO.
+        /// </summary>
+        /// <param name="dto">The DTO to convert to a Treasury.</param>
+        /// <returns>A Treasury constructed from the DTO.</returns>
         public static Treasury DtoToTreasury(TreasuryDto dto)
         {
             var temp = new Treasury(dto.TreasuryId)
@@ -91,6 +133,12 @@ namespace Services.ContainerAPI.Util
             temp.AddItems(DtoToItem(dto.Inventory));
             return temp;
         }
+
+        /// <summary>
+        /// Takes a List of type TreasuryDto and returns a List of treasuries constructed from those DTOs.
+        /// </summary>
+        /// <param name="item">The List of type TreasuryDto to be converted into Items.</param>
+        /// <returns>A List of DTOs of the passed treasuries.</returns>
         public static List<Treasury> DtoToTreasury(IEnumerable<TreasuryDto> dto_list)
         {
             List<Treasury> returnList = new();
@@ -101,7 +149,13 @@ namespace Services.ContainerAPI.Util
             return returnList;
         }
 
-        //ItemTemplate => Dto
+        //---------------------------------| ItemTemplate => Dto |-------------------------
+
+        /// <summary>
+        /// Takes an ItemTemplate and returns a DTO for that template.
+        /// </summary>
+        /// <param name="item">The ItemTemplate to be converted into a DTO.</param>
+        /// <returns>A DTO of the passed ItemTemplate.</returns>
         public static ItemTemplateDto ItemTemplateToDto(ItemTemplate itemTemplate)
         {
             return new ItemTemplateDto
@@ -114,6 +168,12 @@ namespace Services.ContainerAPI.Util
                 Type = itemTemplate.Type
             };
         }
+
+        /// <summary>
+        /// Takes a List of type ItemTemplate and returns a List of DTOs for those templates.
+        /// </summary>
+        /// <param name="item">The List of ItemTemplates to be converted into DTOs.</param>
+        /// <returns>A List of DTOs of the passed ItemTeamplates.</returns>
         public static List<ItemTemplateDto> ItemTemplateToDto(IEnumerable<ItemTemplate> itemTemplate_list)
         {
             List<ItemTemplateDto> returnList = new();
@@ -124,7 +184,13 @@ namespace Services.ContainerAPI.Util
             return returnList;
         }
 
-        //Dto => ItemTemplate
+        //---------------------------------| Dto => ItemTemplate |-------------------------
+
+        /// <summary>
+        /// Takes an ItemTemplateDto and returns an Item constructed from that DTO.
+        /// </summary>
+        /// <param name="dto">The DTO to convert to an ItemTemplate.</param>
+        /// <returns>An ItemTemplate Constructed from the DTO.</returns>
         public static ItemTemplate DtoToItemTemplate(ItemTemplateDto dto)
         {
             return new ItemTemplate(dto.Name)
@@ -136,6 +202,12 @@ namespace Services.ContainerAPI.Util
                 Type = dto.Type
             };
         }
+
+        /// <summary>
+        /// Takes a List of type ItemTemplateDto and returns a List of ItemTemplates constructed from those DTOs.
+        /// </summary>
+        /// <param name="item">The List of type ItemTemplateDto to be converted into ItemTemplates.</param>
+        /// <returns>A List of DTOs of the passed templates.</returns>
         public static List<ItemTemplate> DtoToItemTemplate(IEnumerable<ItemTemplateDto> dto_list)
         {
             List<ItemTemplate> returnList = new();
@@ -146,8 +218,14 @@ namespace Services.ContainerAPI.Util
             return returnList;
         }
 
-        //Character => Dto
-        public static CharacterDto CharacterToDto(Character character) 
+        //---------------------------------| Character => Dto |----------------------------
+
+        /// <summary>
+        /// Takes an Character and returns a DTO for that character.
+        /// </summary>
+        /// <param name="item">The Character to be converted into a DTO.</param>
+        /// <returns>A DTO of the passed Character.</returns>
+        public static CharacterDto CharacterToDto(Character character)
         {
             return new CharacterDto()
             {
@@ -164,6 +242,12 @@ namespace Services.ContainerAPI.Util
                 Cha = character.Cha
             };
         }
+
+        /// <summary>
+        /// Takes a List of type Character and returns a List of DTOs for those characters.
+        /// </summary>
+        /// <param name="item">The List of Characters to be converted into DTOs.</param>
+        /// <returns>A List of DTOs of the passed Characters.</returns>
         public static List<CharacterDto> CharacterToDto(IEnumerable<Character> character_list)
         {
             List<CharacterDto> returnList = new();
@@ -174,7 +258,13 @@ namespace Services.ContainerAPI.Util
             return returnList;
         }
 
-        //Dto => Character
+        //---------------------------------| Dto => Character |----------------------------
+
+        /// <summary>
+        /// Takes a CharacterDto and returns a Character constructed from that DTO.
+        /// </summary>
+        /// <param name="dto">The DTO to convert to a Character.</param>
+        /// <returns>A Character constructed from the DTO.</returns>
         public static Character DtoToCharacter(CharacterDto dto)
         {
             return new Character(dto.CharacterId)
@@ -191,6 +281,12 @@ namespace Services.ContainerAPI.Util
                 Cha = dto.Cha
             };
         }
+
+        /// <summary>
+        /// Takes a List of type CharacterDto and returns a List of Characters constructed from those DTOs.
+        /// </summary>
+        /// <param name="item">The List of type CharacterDto to be converted into Items.</param>
+        /// <returns>A List of DTOs of the passed characters.</returns>
         public static List<Character> DtoToCharacter(IEnumerable<CharacterDto> dto_list)
         {
             List<Character> returnList = new();
