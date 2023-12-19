@@ -6,6 +6,8 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models.Dto
     {
         public Guid CharacterId { get; set; } = Guid.Empty;
         public Guid InventoryId { get; set; } = Guid.Empty;
+        public int Xp { get; set; }
+        public string Class { get; set; } = String.Empty;
         public int MaxHP { get; set; } = 0;
         public int CurrentHp { get; set; } = 0;
         public int ArmorClass { get; set; } = 10;

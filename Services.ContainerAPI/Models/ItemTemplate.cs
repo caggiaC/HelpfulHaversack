@@ -30,6 +30,11 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
 
 
         //Methods
+
+        /// <summary>
+        /// Creates an instance of the Item class based off this template.
+        /// </summary>
+        /// <returns>An Item based off this template.</returns>
         public Item CreateItemFrom()
         {
             return new Item()
@@ -44,6 +49,11 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
             };
         }
 
+        /// <summary>
+        /// Creates an new ItemTemplate based off an existing instance of the Item class
+        /// </summary>
+        /// <param name="item">The Item to create a template from</param>
+        /// <returns>An ItemTemplate created from the passed item.</returns>
         public static ItemTemplate CreateTemplateFromItem(Item item)
         {
             return new ItemTemplate(item.Name)
