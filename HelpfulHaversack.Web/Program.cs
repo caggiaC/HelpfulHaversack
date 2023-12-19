@@ -1,8 +1,20 @@
+using HelpfulHaversack.Web.Services;
+using HelpfulHaversack.Web.Services.IService;
+using HelpfulHaversack.Web.Util;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddControllers().AddNewtonsoftJson();
+
+//Configure HTTP Client
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient(); //base client
+builder.Services.AddHttpClient<ITreasuryService, TreasuryService>(); //<Interface, Implementation>
+
+//Get the program URL from appsettings.json
+StaticDetails.CouponApiBase = builder.Configuration["ServiceUrls:TreasuryAPI"];
 
 var app = builder.Build();
 

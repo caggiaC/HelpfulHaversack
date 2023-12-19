@@ -245,7 +245,10 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         {
             try
             {
-                throw new NotImplementedException();
+                _response.Result = _templates.GetAllTemplates().FindAll(
+                    t => t.Name.ToLower().Contains(templateName.ToLower()));
+
+                _response.Message = $"Retreived all templates with a name containing \"{templateName}\"";
             }
             catch (Exception ex)
             {
@@ -267,7 +270,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 if (treasuryName == null)
                     throw new ArgumentException("treasuryName must not be null");
 
-                Treasury newTreasury = new Treasury() { Name = treasuryName};
+                Treasury newTreasury = new() { Name = treasuryName};
 
                 _treasuryStore.AddTreasury(newTreasury);
 
