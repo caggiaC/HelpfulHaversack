@@ -239,6 +239,23 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return _response;
         }
 
+        [HttpGet]
+        [Route("templates/search={templateName}")]
+        public ResponseDto SearchItemTemplate(string templateName)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+            }
+
+            return _response;
+        }
+
 
         //-----------------------------------Post Endpoints-----------------------------------
         [HttpPost]

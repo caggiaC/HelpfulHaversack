@@ -13,8 +13,8 @@ builder.Services.AddControllers().AddNewtonsoftJson();
 
 var app = builder.Build();
 
-var _templates = ItemTemplateSet.Instance;
-var _treasuries = TreasuryStore.Instance;
+//var _templates = ItemTemplateSet.Instance;
+//var _treasuries = TreasuryStore.Instance;
 
 
 // Configure the HTTP request pipeline.
