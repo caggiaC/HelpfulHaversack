@@ -9,123 +9,211 @@ namespace HelpfulHaversack.Web.Services
     {
         //Dependency Injection
         private readonly IBaseService _baseService;
+        private readonly string _urlBase;
 
         //Constructors
         public TreasuryService(IBaseService baseService)
         {
             _baseService = baseService;
+            _urlBase = StaticDetails.TreasuryApiBase + "/api/";
         }
         //End Dependency Injection
 
         //Methods
-        public Task<ResponseDto?> GetAllTreasuriesAsync()
+        public async Task<ResponseDto?> GetAllTreasuriesAsync()
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _urlBase + "treasuries"
+            });
         }
 
-        public Task<ResponseDto?> GetTreasuryAsync(Guid treasuryId)
+        public async Task<ResponseDto?> GetTreasuryAsync(Guid treasuryId)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _urlBase + $"treasuries/{treasuryId}" 
+            });
         }
 
-        public Task<ResponseDto?> SearchTreasuriesByNameAsync(string treasuryName)
+        public async Task<ResponseDto?> SearchTreasuriesByNameAsync(string treasuryName)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _urlBase + $"treasuries/search={treasuryName}"
+            });
         }
 
-        public Task<ResponseDto?> GetAllItemsFromTreasuryAsync(Guid treasuryId)
+        public async Task<ResponseDto?> GetAllItemsFromTreasuryAsync(Guid treasuryId)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _urlBase + $"treasuries/{treasuryId}/inventory"
+            }) ;
         }
 
-        public Task<ResponseDto?> GetItemFromTreasuryAsync(Guid treasuryId, Guid itemId)
+        public async Task<ResponseDto?> GetItemFromTreasuryAsync(Guid treasuryId, Guid itemId)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _urlBase + $"treasuries/{treasuryId}/inventory/{itemId}"
+            });
         }
 
-        public Task<ResponseDto?> SearchItemByNameFromTreasuryAsync(Guid treasuryId, string itemName)
+        public async Task<ResponseDto?> SearchItemByNameFromTreasuryAsync(Guid treasuryId, string itemName)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _urlBase + $"treasuries/{treasuryId}/inventory/search={itemName}"
+            });
         }
 
-        public Task<ResponseDto?> GetAllItemTemplatesAsync()
+        public async Task<ResponseDto?> GetAllItemTemplatesAsync()
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _urlBase + $"templates"
+            });
         }
 
-        public Task<ResponseDto?> GetItemTemplateAsync(string templateName)
+        public async Task<ResponseDto?> GetItemTemplateAsync(string templateName)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _urlBase + $"templates/{templateName}"
+            });
         }
 
-        public Task<ResponseDto?> SearchItemTemplateAsync(string templateName)
+        public async Task<ResponseDto?> SearchItemTemplateAsync(string templateName)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _urlBase + $"templates/search={templateName}"
+            });
         }
 
-        public Task<ResponseDto?> CreateTreasuryAsync(string treasuryName)
+        public async Task<ResponseDto?> CreateTreasuryAsync(string treasuryName)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.POST,
+                ApiUrl = _urlBase + $"create/treasury:{treasuryName}"
+            });
         }
 
         public async Task<ResponseDto?> CreateItemTemplateAsync(ItemTemplateDto templateDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = StaticDetails.ApiType.PUT,
+                ApiType = StaticDetails.ApiType.POST,
                 Data = templateDto,
-                ApiUrl = StaticDetails.CouponApiBase + "/api/create/template:" + templateDto.Name
+                ApiUrl = _urlBase + $"create/template:{templateDto.Name}"
             });
         }
 
-        public Task<ResponseDto?> UpdateItemTemplateAsync(string templateName, ItemTemplateDto itemTemplateDto)
+        public async Task<ResponseDto?> UpdateItemTemplateAsync(string templateName, ItemTemplateDto itemTemplateDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.PUT,
+                Data = itemTemplateDto,
+                ApiUrl = _urlBase + $"templates/{templateName}"
+            });
         }
 
-        public Task<ResponseDto?> UpdateTreasuryAsync(Guid treasuryId, TreasuryDto treasuryDto)
+        public async Task<ResponseDto?> UpdateTreasuryAsync(Guid treasuryId, TreasuryDto treasuryDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.PUT,
+                Data = treasuryDto,
+                ApiUrl = _urlBase + $"treasuries/{treasuryId}"
+            });
         }
 
-        public Task<ResponseDto?> UpdateItemAsync(Guid treasuryId, Guid itemId, ItemDto itemDto)
+        public async Task<ResponseDto?> UpdateItemAsync(Guid treasuryId, Guid itemId, ItemDto itemDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.PUT,
+                Data = itemDto,
+                ApiUrl = _urlBase + $"treasuries/{treasuryId}/inventory/{itemId}"
+            });
         }
 
-        public Task<ResponseDto?> UpdateItemTemplatePartialAsync(string templateName, JsonPatchDocument<ItemTemplateDto> patchDto)
+        public async Task<ResponseDto?> UpdateItemTemplatePartialAsync(string templateName, JsonPatchDocument<ItemTemplateDto> patchDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.PATCH,
+                Data = patchDto,
+                ApiUrl = _urlBase + $"templates/{templateName}"
+            });;
         }
 
-        public Task<ResponseDto?> UpdateTreasuryPartialAsync(Guid treasuryId, JsonPatchDocument<TreasuryDto> patchDto)
+        public async Task<ResponseDto?> UpdateTreasuryPartialAsync(Guid treasuryId, JsonPatchDocument<TreasuryDto> patchDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.PATCH,
+                Data = patchDto,
+                ApiUrl = _urlBase + $"treasuries/{treasuryId}"
+            });
         }
 
-        public Task<ResponseDto?> UpdateItemPartialAsync(Guid treasuryId, Guid itemId, JsonPatchDocument<ItemDto> patchDto)
+        public async Task<ResponseDto?> UpdateItemPartialAsync(Guid treasuryId, Guid itemId, JsonPatchDocument<ItemDto> patchDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.PATCH,
+                Data = patchDto,
+                ApiUrl = _urlBase + $"/api/"
+            });
         }
 
-        public Task<ResponseDto?> MoveItemAsync(Guid srcTreasuryId, Guid itemId, Guid destTreasuryId)
+        public async Task<ResponseDto?> MoveItemAsync(Guid srcTreasuryId, Guid itemId, Guid destTreasuryId)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.PATCH,
+                ApiUrl = _urlBase + $"treasuries/{srcTreasuryId}/inventory/{itemId}:sendTo={destTreasuryId}"
+            });
         }
 
-        public Task<ResponseDto?> DeleteTreasuryAsync(Guid treasuryId)
+        public async Task<ResponseDto?> DeleteTreasuryAsync(Guid treasuryId)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto() 
+            {
+                ApiType = StaticDetails.ApiType.DELETE,
+                ApiUrl = _baseService + $"treasuries/{treasuryId}"
+            });
         }
 
-        public Task<ResponseDto?> DeleteItemAsync(Guid treasuryId, Guid itemId)
+        public async Task<ResponseDto?> DeleteItemAsync(Guid treasuryId, Guid itemId)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.DELETE,
+                ApiUrl = _baseService + $"treasuries/{treasuryId}/inventory/{itemId}"
+            });
         }
 
-        public Task<ResponseDto?> DeleteItemTemplateAsync(string templateName)
+        public async Task<ResponseDto?> DeleteItemTemplateAsync(string templateName)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.DELETE,
+                ApiUrl = _baseService + $"templates/{templateName}"
+            });
         }
     }
 }

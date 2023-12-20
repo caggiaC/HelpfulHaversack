@@ -14,7 +14,7 @@ builder.Services.AddHttpClient(); //base client
 builder.Services.AddHttpClient<ITreasuryService, TreasuryService>(); //<Interface, Implementation>
 
 //Get the program URL from appsettings.json
-StaticDetails.CouponApiBase = builder.Configuration["ServiceUrls:TreasuryAPI"];
+StaticDetails.TreasuryApiBase = builder.Configuration["ServiceUrls:TreasuryAPI"];
 
 var app = builder.Build();
 

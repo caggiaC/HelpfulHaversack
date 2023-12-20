@@ -528,7 +528,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         }
 
         [HttpPatch]
-        [Route("treasuries/{srcTreasuryId:guid}/inventory/{itemId:guid};sendTo={destTreasuryId:guid}")]
+        [Route("treasuries/{srcTreasuryId:guid}/inventory/{itemId:guid}:sendTo={destTreasuryId:guid}")]
         public ResponseDto MoveItem(Guid srcTreasuryId, Guid itemId, Guid destTreasuryId)
         {
             try
