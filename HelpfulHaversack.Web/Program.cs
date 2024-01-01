@@ -8,13 +8,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddControllers().AddNewtonsoftJson();
 
-//Configure HTTP Client
+//Configure HTTP Client.
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient(); //base client
 builder.Services.AddHttpClient<ITreasuryService, TreasuryService>(); //<Interface, Implementation>
 
 //Get the program URL from appsettings.json
 StaticDetails.TreasuryApiBase = builder.Configuration["ServiceUrls:TreasuryAPI"];
+
+//Add custom services to the container.
+builder.Services.AddScoped<IBaseService, BaseService>();
+builder.Services.AddScoped<ITreasuryService, TreasuryService>();
 
 var app = builder.Build();
 
