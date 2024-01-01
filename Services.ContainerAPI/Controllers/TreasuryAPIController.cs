@@ -686,26 +686,20 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             private void SaveIfModified(object? state)
             {
                 //Console.WriteLine($"Checked state {DateTime.Now} ({_templateMasterSetModified} | {_treasuryStoreModified})");
-                if (_templateSetModified)
+                if (_templateSetModified && !_locked)
                 { 
-                    if(!_locked)
-                    {
-                        _locked = true;
-                        _templates.Save();
-                        _locked = false;
-                        _templateSetModified = false;
-                    }
+                    _locked = true;
+                    _templates.Save();
+                    _templateSetModified = false;
+                    _locked = false;
                 }
 
-                if(_treasuryStoreModified)
+                if(_treasuryStoreModified && !_locked)
                 {
-                    if(!_locked)
-                    {
-                        _locked = true;
-                        _treasuries.Save();
-                        _locked = false;
-                        _treasuryStoreModified = false;
-                    }
+                    _locked = true;
+                    _treasuries.Save();
+                    _treasuryStoreModified = false;
+                    _locked = false;
                 }
             }
 
