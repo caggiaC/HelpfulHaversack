@@ -1,4 +1,5 @@
-﻿using static HelpfulHaversack.Web.Models.ItemTemplate;
+﻿
+using static HelpfulHaversack.Web.Models.ItemTemplate;
 
 namespace HelpfulHaversack.Web.Models.Dto
 {

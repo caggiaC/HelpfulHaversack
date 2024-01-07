@@ -1,5 +1,4 @@
-﻿using HelpfulHaversack.Web.Util;
-using static HelpfulHaversack.Web.Util.StaticDetails;
+﻿using static HelpfulHaversack.Web.Util.StaticDetails;
 
 namespace HelpfulHaversack.Web.Models.Dto
 {
