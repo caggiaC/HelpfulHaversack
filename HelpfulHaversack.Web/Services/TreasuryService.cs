@@ -15,13 +15,14 @@ namespace HelpfulHaversack.Web.Services
         public TreasuryService(IBaseService baseService)
         {
             _baseService = baseService;
-            _urlBase = StaticDetails.TreasuryApiBase + "/api/";
+            _urlBase = StaticDetails.TreasuryApiBase + "/api/TreasuryAPI/";
         }
         //End Dependency Injection
 
         //Methods
         public async Task<ResponseDto?> GetAllTreasuriesAsync()
         {
+            Console.WriteLine(_urlBase + "treasuries");
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticDetails.ApiType.GET,

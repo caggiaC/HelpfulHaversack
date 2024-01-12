@@ -9,7 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{E8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelpfulHaversack.Services.ContainerAPI", "Services.ContainerAPI\HelpfulHaversack.Services.ContainerAPI.csproj", "{30954C42-AF09-4767-81D2-E836479A8AE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelpfulHaversack.Web", "HelpfulHaversack.Web\HelpfulHaversack.Web.csproj", "{081561B9-D4AC-42E4-8F40-26D877F91962}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HelpfulHaversack.Web", "HelpfulHaversack.Web\HelpfulHaversack.Web.csproj", "{081561B9-D4AC-42E4-8F40-26D877F91962}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{E3973694-2C89-488A-A351-387D2454EDC0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{F55BF9BE-F33F-433D-9F60-2161955FD18A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
