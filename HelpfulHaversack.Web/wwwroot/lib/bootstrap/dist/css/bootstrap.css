@@ -13863,6 +13863,12 @@ pre {
 }
 
 .hiddenRow {
-    padding: 0 !important;
+    padding: 0;
 }
+
+.subRow:hover {
+    background-color: lightgray
+}
+
+
 /*# sourceMappingURL=bootstrap.min.css.map */

@@ -18,51 +18,68 @@
 
 			</div>
 		</div>
-		<table class="table table-striped">
-			<thead>
-				<tr>
-					<th>
-						Name
-					</th>
-					<th>
-						Number of Items
-					</th>
-					<th>
-						Treasury Id
-					</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach(var treasury in Model)
-				{
-					<tr>
-						<td>
-							@treasury.Name
-						</td>
-						<td>
-							@((treasury.Inventory.Count()).ToString())
-						</td>
-						<td>
-							@((treasury.TreasuryId).ToString())
-						</td>
-						<td>
-							<a class="btn btn-secondary float-end" data-bs-toggle="collapse" data-bs-target="#id-@treasury.TreasuryId">
-								<i class="bi bi-eye"></i>
-							</a>
-						</td>
-					</tr>
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<table class="table table-striped border-black border">
+						<thead>
+							<tr>
+								<th class="fw-bold">
+									Name
+								</th>
+								<th class="fw-bold">
+									Number of Items
+								</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach(var treasury in Model)
+							{
+								<tr>
+									<td>
+										@treasury.Name
+									</td>
+									<td>
+										@((treasury.Inventory.Count()).ToString())
+									</td>
+									<td>
+										<a class="btn btn-secondary float-end" data-bs-toggle="collapse" data-bs-target="#id-@treasury.TreasuryId">
+											<i class="bi bi-chevron-down"></i>
+										</a>
+									</td>
+								</tr>
 
-					<tr class="hiddenRow">
-						<td colspan="5">
-							<div class="collapse" id="id-@treasury.TreasuryId">
-								The contents of this @(treasury.Name). 
-							</div>
-						</td>
-					</tr>
-				}
-			</tbody>
-		</table>
+								<tr class="hiddenRow">
+									<td colspan="5">	
+										<div class="collapse" id="id-@treasury.TreasuryId">
+											<div class="container">
+												@foreach(var item in treasury.Inventory)
+												{
+													<a>
+														<div class="row subRow">
+															@item.Name&nbsp;x1
+														</div>
+													</a>
+												}
+											</div>
+										</div>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+				<div class="col border">
+					<table>
+						<thead>
+
+						</thead>
+					</table>
+
+				</div>
+			</div>
+		</div>
 
 	</div>
 
