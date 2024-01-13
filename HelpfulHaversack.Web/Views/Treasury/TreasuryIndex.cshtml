@@ -14,11 +14,11 @@
 			<div class="col-6">
 			</div>
 			<div class="col-6 text-end">
-				<a class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> Create New Treasury</a>
+				<a class="btn btn-success"><i class="bi bi-plus-square"></i> Create New Treasury</a>
 
 			</div>
 		</div>
-		<table class="table">
+		<table class="table table-striped">
 			<thead>
 				<tr>
 					<th>
@@ -26,6 +26,9 @@
 					</th>
 					<th>
 						Number of Items
+					</th>
+					<th>
+						Treasury Id
 					</th>
 					<th></th>
 				</tr>
@@ -41,9 +44,20 @@
 							@((treasury.Inventory.Count()).ToString())
 						</td>
 						<td>
-							<a class="btn btn-danger">
-								<i class="bi bi-trash"></i>
+							@((treasury.TreasuryId).ToString())
+						</td>
+						<td>
+							<a class="btn btn-secondary float-end" data-bs-toggle="collapse" data-bs-target="#id-@treasury.TreasuryId">
+								<i class="bi bi-eye"></i>
 							</a>
+						</td>
+					</tr>
+
+					<tr class="hiddenRow">
+						<td colspan="5">
+							<div class="collapse" id="id-@treasury.TreasuryId">
+								The contents of this @(treasury.Name). 
+							</div>
 						</td>
 					</tr>
 				}

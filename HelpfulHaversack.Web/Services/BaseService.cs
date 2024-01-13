@@ -31,11 +31,14 @@ namespace HelpfulHaversack.Web.Services
                 //Add a key-value pair to the header of the request
                 message.Headers.Add("Accept", "application/json");
 
-                //token
+				//token
 
-                //If the request DTO has valid data, serialize it into JSON format and add it 
-                //to the request conent as a string
-                if (request.Data != null)
+				//Set the URI to make a request to
+				message.RequestUri = new Uri(request.ApiUrl);
+
+				//If the request DTO has valid data, serialize it into JSON format and add it 
+				//to the request conent as a string
+				if (request.Data != null)
                 {
                     message.Content = new StringContent(
                         JsonConvert.SerializeObject(request.Data), //object
