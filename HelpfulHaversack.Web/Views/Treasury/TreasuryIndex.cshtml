@@ -14,7 +14,7 @@
 			<div class="col-6">
 			</div>
 			<div class="col-6 text-end">
-				<a class="btn btn-success"><i class="bi bi-plus-square"></i> Create New Treasury</a>
+				<a class="btn btn-success disabled"><i class="bi bi-plus-square"></i> Create New Treasury</a>
 
 			</div>
 		</div>
@@ -44,7 +44,7 @@
 										@((treasury.Inventory.Count()).ToString())
 									</td>
 									<td>
-										<a class="btn btn-secondary float-end" data-bs-toggle="collapse" data-bs-target="#id-@treasury.TreasuryId">
+										<a class="btn btn-secondary float-end" data-bs-toggle="collapse" data-bs-target="#row-@treasury.TreasuryId">
 											<i class="bi bi-chevron-down"></i>
 										</a>
 									</td>
@@ -52,15 +52,64 @@
 
 								<tr class="hiddenRow">
 									<td colspan="5">	
-										<div class="collapse" id="id-@treasury.TreasuryId">
+										<div class="collapse" id="row-@treasury.TreasuryId">
 											<div class="container">
+												<div class="row border-bottom border-black">
+													<div class="col">
+														PP: @treasury.PP
+													</div>
+													<div class="col">
+														GP: @treasury.GP
+													</div>
+													<div class="col">
+														EP: @treasury.EP
+													</div>
+													<div class="col">
+														SP: @treasury.SP
+													</div>
+													<div class="col">
+														CP: @treasury.CP
+													</div>													
+												</div>
 												@foreach(var item in treasury.Inventory)
 												{
-													<a>
+													<a data-bs-toggle="modal" data-bs-target="#modal-@item.ItemId">
 														<div class="row subRow">
-															@item.Name&nbsp;x1
+															- @item.Name&nbsp;x1
 														</div>
 													</a>
+													<div class="modal fade" id="modal-@item.ItemId" tabindex="-1">
+														<div class="modal-dialog">
+															<div class="modal-content">
+																<div class="modal-header">
+																	<h5 class="modal-title fw-bold">@item.Name</h5>
+																	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																</div>
+																<div class="modal-body">
+																	<div>
+																		Weight: @((item.Weight).ToString()) lbs.
+																	</div>
+																	<div>
+																		Value: @((item.Value).ToString()) GP
+																	</div>
+																	<div>
+																		Type: @((item.Type).ToString())
+																	</div>
+																	<div class="border-bottom border-black">
+																		Rarity: @((item.Rarity).ToString())
+																	</div>
+																	<div class="border-bottom border-black">
+																	</div>
+																	<div>
+																		@item.Description
+																	</div>
+																</div>
+																<div class="modal-footer">
+																	<button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+																</div>
+															</div>
+														</div>
+													</div>
 												}
 											</div>
 										</div>
@@ -70,17 +119,8 @@
 						</tbody>
 					</table>
 				</div>
-				<div class="col border">
-					<table>
-						<thead>
-
-						</thead>
-					</table>
-
-				</div>
 			</div>
 		</div>
 
 	</div>
-
 </div>
