@@ -13867,7 +13867,8 @@ pre {
 }
 
 .subRow:hover {
-    background-color: lightgray
+    background-color: lightgray;
+    cursor: pointer
 }
 
 

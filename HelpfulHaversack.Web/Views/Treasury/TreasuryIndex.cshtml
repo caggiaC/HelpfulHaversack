@@ -75,7 +75,9 @@
 												{
 													<a data-bs-toggle="modal" data-bs-target="#modal-@item.ItemId">
 														<div class="row subRow">
-															- @item.Name&nbsp;x1
+															<div class="col">
+																- @item.Name&nbsp;x1
+															</div>
 														</div>
 													</a>
 													<div class="modal fade" id="modal-@item.ItemId" tabindex="-1">
@@ -83,7 +85,7 @@
 															<div class="modal-content">
 																<div class="modal-header">
 																	<h5 class="modal-title fw-bold">@item.Name</h5>
-																	<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+																	<a class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Close</a>
 																</div>
 																<div class="modal-body">
 																	<div>
@@ -105,7 +107,9 @@
 																	</div>
 																</div>
 																<div class="modal-footer">
-																	<button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+																	<a class="btn btn-sm btn-info disabled"><i class="bi bi-send"></i> Move</a>
+																	<a class="btn btn-sm btn-warning disabled"><i class="bi bi-tools"></i> Edit</a>
+																	<a class="btn btn-sm btn-danger disabled"><i class="bi bi-trash"></i> Delete</a>
 																</div>
 															</div>
 														</div>

@@ -23,6 +23,7 @@ namespace Services.ContainerAPI.Util
                 Description = item.Description,
                 Weight = item.Weight,
                 Value = item.Value,
+                Type = item.Type
             };
         }
 
@@ -57,6 +58,7 @@ namespace Services.ContainerAPI.Util
                 Description = dto.Description,
                 Weight = dto.Weight,
                 Value = dto.Value,
+                Type = dto.Type
             };
         }
 
