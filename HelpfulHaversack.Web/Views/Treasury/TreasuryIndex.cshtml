@@ -14,7 +14,7 @@
 			<div class="col-6">
 			</div>
 			<div class="col-6 text-end">
-				<a class="btn btn-success disabled"><i class="bi bi-plus-square"></i> Create New Treasury</a>
+				<a class="btn btn-success"><i class="bi bi-plus-square"></i> Create New Treasury</a>
 
 			</div>
 		</div>
@@ -31,6 +31,11 @@
 									Number of Items
 								</th>
 								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
 							</tr>
 						</thead>
 						<tbody>
@@ -44,39 +49,71 @@
 										@((treasury.Inventory.Count()).ToString())
 									</td>
 									<td>
+										PP: @(treasury.PP.ToString())
+									</td>
+									<td>
+										GP: @(treasury.GP.ToString())
+									</td>
+									<td>
+										EP: @(treasury.EP.ToString())
+									</td>
+									<td>
+										SP: @(treasury.SP.ToString())
+									</td>
+									<td>
+										CP: @(treasury.CP.ToString())
+									</td>
+									<td>
 										<a class="btn btn-secondary float-end" data-bs-toggle="collapse" data-bs-target="#row-@treasury.TreasuryId">
 											<i class="bi bi-chevron-down"></i>
 										</a>
 									</td>
 								</tr>
-
 								<tr class="hiddenRow">
-									<td colspan="5">	
+									<td colspan="8">	
 										<div class="collapse" id="row-@treasury.TreasuryId">
-											<div class="container">
-												<div class="row border-bottom border-black">
-													<div class="col">
-														PP: @treasury.PP
-													</div>
-													<div class="col">
-														GP: @treasury.GP
-													</div>
-													<div class="col">
-														EP: @treasury.EP
-													</div>
-													<div class="col">
-														SP: @treasury.SP
-													</div>
-													<div class="col">
-														CP: @treasury.CP
-													</div>													
+											<div class="row border-bottom border-black">
+												<div class="col">
+													Name
 												</div>
+												<div class="col">
+													Quantity
+												</div>
+												<div class="col">
+													Weight (lbs.)
+												</div>
+												<div class="col">
+													Value
+												</div>
+												<div class="col">
+													Type
+												</div>
+												<div class="col">
+													Rarity
+												</div>
+											</div>
+											<div class="container">
 												@foreach(var item in treasury.Inventory)
 												{
 													<a data-bs-toggle="modal" data-bs-target="#modal-@item.ItemId">
 														<div class="row subRow">
 															<div class="col">
-																- @item.Name&nbsp;x1
+																@item.Name
+															</div>
+															<div class="col">
+																x1
+															</div>
+															<div class="col">
+																@item.Weight
+															</div>
+															<div class="col">
+																@item.Value
+															</div>
+															<div class="col">
+																@item.Type
+															</div>
+															<div class="col">
+																@item.Rarity
 															</div>
 														</div>
 													</a>
@@ -85,7 +122,7 @@
 															<div class="modal-content">
 																<div class="modal-header">
 																	<h5 class="modal-title fw-bold">@item.Name</h5>
-																	<a class="btn btn-sm btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle"></i> Close</a>
+																	<a class="btn rounded" data-bs-dismiss="modal"><i class="bi bi-x"></i></a>
 																</div>
 																<div class="modal-body">
 																	<div>
@@ -107,9 +144,9 @@
 																	</div>
 																</div>
 																<div class="modal-footer">
-																	<a class="btn btn-sm btn-info disabled"><i class="bi bi-send"></i> Move</a>
-																	<a class="btn btn-sm btn-warning disabled"><i class="bi bi-tools"></i> Edit</a>
-																	<a class="btn btn-sm btn-danger disabled"><i class="bi bi-trash"></i> Delete</a>
+																	<a class="btn btn-sm btn-info"><i class="bi bi-send"></i> Move</a>
+																	<a class="btn btn-sm btn-warning"><i class="bi bi-tools"></i> Edit</a>
+																	<a class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Delete</a>
 																</div>
 															</div>
 														</div>
