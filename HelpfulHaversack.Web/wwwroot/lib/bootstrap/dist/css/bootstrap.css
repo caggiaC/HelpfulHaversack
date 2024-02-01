@@ -13871,5 +13871,9 @@ pre {
     cursor: pointer
 }
 
+.subRow:hover > a{
+    visibility: visible
+}
+
 
 /*# sourceMappingURL=bootstrap.min.css.map */

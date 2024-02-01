@@ -91,16 +91,18 @@
 												<div class="col">
 													Rarity
 												</div>
+												<div class="col">
+												</div>
 											</div>
 											<div class="container">
 												@foreach(var item in treasury.Inventory)
 												{
-													<a data-bs-toggle="modal" data-bs-target="#modal-@item.ItemId">
+													
 														<div class="row subRow">
 															<div class="col">
 																@item.Name
 															</div>
-															<div class="col">
+															<div class="col">	
 																x1
 															</div>
 															<div class="col">
@@ -115,8 +117,11 @@
 															<div class="col">
 																@item.Rarity
 															</div>
+															<div class="col">
+																<a class="btn btn-info rounded invisible float-end"><i class="bi bi-eye"></i></a>
+															</div>
 														</div>
-													</a>
+													
 													<div class="modal fade" id="modal-@item.ItemId" tabindex="-1">
 														<div class="modal-dialog">
 															<div class="modal-content">
@@ -136,8 +141,6 @@
 																	</div>
 																	<div class="border-bottom border-black">
 																		Rarity: @((item.Rarity).ToString())
-																	</div>
-																	<div class="border-bottom border-black">
 																	</div>
 																	<div>
 																		@item.Description
