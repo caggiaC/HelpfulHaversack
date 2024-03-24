@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using HelpfulHaversack.Services.ContainerAPI.Data;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -9,11 +10,14 @@ namespace HelpfulHaversack.Services.ContainerAPI.Util
 	/// </summary>
 	public class RsaHelper
 	{
-		private static RsaHelper _instance = new();
+		private static readonly Lazy<RsaHelper> _instance = new(() => new RsaHelper());
 
-		public static RsaHelper Instance { get { return _instance; } }
+		/// <summary>
+		/// The RsaHelper singleton instance
+		/// </summary>
+		public static RsaHelper Instance { get { return _instance.Value; } }
 
-		private static RSACryptoServiceProvider _cryptoServiceProvider = new();
+		private static readonly RSACryptoServiceProvider _cryptoServiceProvider = new();
 		private readonly RSAParameters _privateKey;
 		private readonly RSAParameters _publicKey;
 
@@ -37,13 +41,14 @@ namespace HelpfulHaversack.Services.ContainerAPI.Util
 		}
 
 		/// <summary>
-		/// Takes a string and encrypts it byte-by-byte 
+		/// Takes a string and encrypts it byte-by-byte using the provided key
 		/// </summary>
 		/// <param name="plainText">The text to encrypt</param>
+		/// <param name="targetKey">The RSA key to encrypt the text with</param>
 		/// <returns>A string representation of the encrypted text</returns>
-		public string Encrypt(string plainText)
+		public string Encrypt(string plainText, RSAParameters targetKey)
 		{
-			_cryptoServiceProvider.ImportParameters(_publicKey);
+			_cryptoServiceProvider.ImportParameters(targetKey);
 
 			var cypher = _cryptoServiceProvider.Encrypt(Encoding.Unicode.GetBytes(plainText), false);
 
