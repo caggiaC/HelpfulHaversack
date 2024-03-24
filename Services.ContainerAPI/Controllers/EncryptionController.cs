@@ -10,7 +10,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
 		[HttpGet]
 		public EncryptionResponse Get()
 		{
-			var rsaHelper = new RsaHelper();
+			var rsaHelper = RsaHelper.Instance;
 			return new EncryptionResponse
 			{
 				Encrypted = "",

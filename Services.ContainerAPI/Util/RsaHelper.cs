@@ -4,13 +4,20 @@ using System.Xml.Serialization;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Util
 {
+	/// <summary>
+	/// A singleton class responsible for encrypting and decrypting messages for transit.
+	/// </summary>
 	public class RsaHelper
 	{
+		private static RsaHelper _instance = new();
+
+		public static RsaHelper Instance { get { return _instance; } }
+
 		private static RSACryptoServiceProvider _cryptoServiceProvider = new();
 		private readonly RSAParameters _privateKey;
 		private readonly RSAParameters _publicKey;
 
-		public RsaHelper()
+		private RsaHelper()
 		{
 			_privateKey = _cryptoServiceProvider.ExportParameters(true);
 			_publicKey = _cryptoServiceProvider.ExportParameters(false);
