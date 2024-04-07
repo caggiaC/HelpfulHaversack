@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using HelpfulHaversack.Services.ContainerAPI.Data;
+using Services.ContainerAPI.Models.Dto;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
 
@@ -66,6 +68,28 @@ namespace HelpfulHaversack.Services.ContainerAPI.Util
 			var plainText = _cryptoServiceProvider.Decrypt(Convert.FromBase64String(cypherText), false);
 
 			return Encoding.Unicode.GetString(plainText);
+		}
+
+		/// <summary>
+		/// Converts a ResponseDto into an EncryptionResponse that can be safely sent across
+		/// a network.
+		/// </summary>
+		/// <param name="dto">The dto to be encrypted.</param>
+		/// <param name="targetKey">The public RSA key for the destination service.</param>
+		/// <returns>
+		/// An EncrpytionResponse containing two representations of the ResponseDto;
+		/// one encrypted with the target's public key, and one encrypted with this instance's
+		/// private key for verification purposes.
+		/// </returns>
+		public EncryptionResponse EncryptResponse(ResponseDto dto, RSAParameters targetKey)
+		{
+			string plainText = JsonFileHandler.Serialize<ResponseDto>(dto);
+
+            return new EncryptionResponse
+			{
+				Data = Encrypt(plainText, targetKey),
+				Verification = Encrypt(plainText, _privateKey)
+			};
 		}
 	}
 }

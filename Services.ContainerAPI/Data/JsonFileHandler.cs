@@ -43,5 +43,17 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
 
             return deseralizedValues;
         }
+
+        /// <summary>
+        /// Takes an object of type T and returns a string containing the 
+        /// JSON serialized representation of it
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="input">The object to be serialized</param>
+        /// <returns>a string representation of the serialized object</returns>
+        public static string Serialize<T>(T input)
+        {
+            return JsonConvert.SerializeObject(input);
+        }
     }
 }

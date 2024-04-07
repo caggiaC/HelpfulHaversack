@@ -67,5 +67,6 @@ namespace HelpfulHaversack.Services.Web.Util
 
 			return Encoding.Unicode.GetString(plainText);
 		}
+
 	}
 }

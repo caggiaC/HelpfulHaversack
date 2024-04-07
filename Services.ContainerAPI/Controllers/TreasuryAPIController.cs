@@ -53,6 +53,8 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             }
 
             return _response;
+
+            //return _rsaHelper.Encrypt(JsonFileHandler.Serialize<ResponseDto>(_response, <targetKey>));
         }
 
         [HttpGet]
