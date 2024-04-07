@@ -2,7 +2,7 @@
 using System.Text;
 using System.Xml.Serialization;
 
-namespace HelpfulHaversack.Services.ContainerAPI.Util
+namespace HelpfulHaversack.Services.Web.Util
 {
 	/// <summary>
 	/// A singleton class responsible for encrypting and decrypting messages for transit.

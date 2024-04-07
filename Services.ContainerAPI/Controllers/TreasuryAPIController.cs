@@ -6,6 +6,7 @@ using Services.ContainerAPI.Data;
 using Services.ContainerAPI.Util;
 using HelpfulHaversack.Services.ContainerAPI.Data;
 using HelpfulHaversack.Services.ContainerAPI.Models.Dto;
+using HelpfulHaversack.Services.ContainerAPI.Util;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Controllers
 {
@@ -16,6 +17,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         private readonly ResponseDto _response;
         private readonly ItemTemplateSet _templates;
         private readonly TreasuryStore _treasuryStore;
+        private readonly RsaHelper _rsaHelper;
         private readonly TimedStateService _timedStateService;
 
         //Dependency Injection
@@ -26,6 +28,8 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             _response = new ResponseDto();
             _templates = ItemTemplateSet.Instance;
             _treasuryStore = TreasuryStore.Instance;
+            _rsaHelper = RsaHelper.Instance;
+
             _timedStateService = new();
 
             _timedStateService.StartAsync(new CancellationToken());  
