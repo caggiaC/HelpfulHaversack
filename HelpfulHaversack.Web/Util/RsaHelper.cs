@@ -1,13 +1,15 @@
-﻿using System.Security.Cryptography;
+﻿using HelpfulHaversack.Web.Models.Dto;
+using Newtonsoft.Json;
+using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Serialization;
 
 namespace HelpfulHaversack.Services.Web.Util
 {
-	/// <summary>
-	/// A singleton class responsible for encrypting and decrypting messages for transit.
-	/// </summary>
-	public class RsaHelper
+    /// <summary>
+    /// A singleton class responsible for encrypting and decrypting messages for transit.
+    /// </summary>
+    public class RsaHelper
 	{
 		private static readonly Lazy<RsaHelper> _instance = new(() => new RsaHelper());
 
@@ -68,5 +70,27 @@ namespace HelpfulHaversack.Services.Web.Util
 			return Encoding.Unicode.GetString(plainText);
 		}
 
-	}
+        /// <summary>
+        /// Converts a ResponseDto into an EncryptionResponse that can be safely sent across
+        /// a network.
+        /// </summary>
+        /// <param name="obj">The object to be encrypted.</param>
+        /// <param name="targetKey">The public RSA key for the destination service.</param>
+        /// <returns>
+        /// An EncrpytionResponse containing two representations of the ResponseDto;
+        /// one encrypted with the target's public key, and one encrypted with this instance's
+        /// private key for verification purposes.
+        /// </returns>
+        public EncryptionDto EncryptResponse(object? obj, RSAParameters targetKey)
+        {
+			string plainText = (obj != null) ? JsonConvert.SerializeObject(obj) : "null";
+
+            return new EncryptionDto
+            {
+                Data = Encrypt(plainText, targetKey),
+                Verification = Encrypt(plainText, _privateKey)
+            };
+        }
+
+    }
 }
