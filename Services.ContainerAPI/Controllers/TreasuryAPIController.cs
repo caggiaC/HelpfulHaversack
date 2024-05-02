@@ -394,7 +394,11 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         //-----------------------------------Put Endpoints------------------------------------
         [HttpPut]
         [Route("templates/{templateName}")]
-        public ResponseDto UpdateItemTemplate(string templateName, [FromBody] ItemTemplateDto itemTemplateDto)
+        [Route("create/template:{templateName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateItemTemplate(string templateName, [FromBody] ItemTemplateDto itemTemplateDto)
         {
             try
             {
@@ -407,6 +411,14 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 _response.Message = $"Updated {templateName}. Entire resource was affected.";
                 _timedStateService.SetTemplateSetModified();
             }
+            catch (Exception ex) when (
+                ex is BadHttpRequestException 
+                || ex is ArgumentException)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return BadRequest(_response);
+            }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
@@ -414,12 +426,15 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
 
-            return _response;
+            return Ok(_response);
         }
 
         [HttpPut]
         [Route("treasuries/{treasuryId:guid}")]
-        public ResponseDto UpdateTreasury(Guid treasuryId, [FromBody] TreasuryDto treasuryDto)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateTreasury(Guid treasuryId, [FromBody] TreasuryDto treasuryDto)
         {
             try
             {
@@ -433,6 +448,14 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                     $"Entire resource was affected.";
                 _timedStateService.SetTreasuryStoreModified();
             }
+            catch (Exception ex) when (
+                ex is ArgumentException
+                || ex is BadHttpRequestException)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return BadRequest(_response);
+            }
             catch (Exception ex)
             {
                 _response.IsSuccess = false;
@@ -440,12 +463,15 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
 
-            return _response;
+            return Ok(_response);
         }
 
         [HttpPut]
         [Route("treasuries/{treasuryId:guid}/inventory/{itemId:guid}")]
-        public ResponseDto UpdateItem(Guid treasuryId, Guid itemId, [FromBody] ItemDto itemDto)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateItem(Guid treasuryId, Guid itemId, [FromBody] ItemDto itemDto)
         {
             try
             {
@@ -466,17 +492,24 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                     }
                     else //removedItem == null
                     {
-                        _response.IsSuccess = false;
-                        _response.Message = $"Item with the Id {itemId} was not found in " +
-                            $"Treasury \"{targetTreasury.Name}\" [id:{treasuryId}]";
+                        throw new BadHttpRequestException(
+                            $"Item with the Id {itemId} was not found in " +
+                            $"Treasury \"{targetTreasury.Name}\" [id:{treasuryId}]");
                     }
                 }
                 else //targetTreasury == null
                 {
-                    _response.Result = null;
-                    _response.IsSuccess = false;
-                    _response.Message = $"Treasury with the id {treasuryId} was not found.";
+                    throw new BadHttpRequestException(
+                        $"Treasury with the id {treasuryId} was not found.");
                 }  
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException
+                || ex is BadHttpRequestException)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return BadRequest(_response);
             }
             catch (Exception ex)
             {
@@ -485,14 +518,17 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
 
-            return _response;
+            return Ok(_response);
         }
 
 
         //-----------------------------------Patch Endpoints----------------------------------
         [HttpPatch]
         [Route("templates/{templateName}")]
-        public ResponseDto UpdateItemTemplatePartial(string templateName, JsonPatchDocument<ItemTemplateDto> patchDto)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateItemTemplatePartial(string templateName, JsonPatchDocument<ItemTemplateDto> patchDto)
         {
             try
             {
@@ -514,10 +550,17 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 }
                 else //targetTemplate == null
                 {
-                    _response.IsSuccess = false;
-                    _response.Message = $"Template with the name \"{templateName}\" was not found.";
-                }
-                           
+                   throw new BadHttpRequestException(
+                       $"Template with the name \"{templateName}\" was not found.");
+                }            
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException
+                || ex is BadHttpRequestException)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return BadRequest(_response);
             }
             catch (Exception ex)
             {
@@ -526,12 +569,15 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
 
-            return _response;
+            return Ok(_response);
         }
 
         [HttpPatch]
         [Route("treasuries/{treasuryId:guid}")]
-        public ResponseDto UpdateTreasuryPartial(Guid treasuryId, JsonPatchDocument<TreasuryDto> patchDto)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateTreasuryPartial(Guid treasuryId, JsonPatchDocument<TreasuryDto> patchDto)
         {
             try
             {
@@ -553,9 +599,17 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 }
                 else //targetTreasury == null
                 {
-                    _response.IsSuccess = false;
-                    _response.Message = $"Treasury with the Id {treasuryId} was not found.";
+                    throw new BadHttpRequestException(
+                        $"Treasury with the Id {treasuryId} was not found.");
                 }     
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException
+                || ex is BadHttpRequestException)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return BadRequest(_response);
             }
             catch (Exception ex)
             {
@@ -564,12 +618,15 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
 
-            return _response;
+            return Ok(_response);
         }
 
         [HttpPatch]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("treasuries/{treasuryId:guid}/inventory/{itemId:guid}")]
-        public ResponseDto UpdateItemPartial(Guid treasuryId, Guid itemId, JsonPatchDocument<ItemDto> patchDto)
+        public IActionResult UpdateItemPartial(Guid treasuryId, Guid itemId, JsonPatchDocument<ItemDto> patchDto)
         {
             try
             {
@@ -577,10 +634,10 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                     throw new BadHttpRequestException("Data Transfer Object was invalid.");
 
                 Treasury? targetTreasury = _treasuryStore.GetTreasury(treasuryId);
-                if(targetTreasury != null)
+                if (targetTreasury != null)
                 {
                     var targetItem = targetTreasury.GetItem(itemId);
-                    if(targetItem != null)
+                    if (targetItem != null)
                     {
                         ItemDto targetItemDto = Mapper.ItemToDto(targetItem);
 
@@ -594,15 +651,22 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                     }
                     else //targetItem == null
                     {
-                        _response.IsSuccess = false;
-                        _response.Message = $"";
-                    }                    
+                        throw new BadHttpRequestException(
+                            $"Requested item was not found within Treasury \"{targetTreasury.Name}\" [id:{targetTreasury.TreasuryId}].");
+                    }
                 }
                 else //targetTreasury == null
                 {
-                    _response.IsSuccess = false;
-                    _response.Message = $"Treasury with the Id {treasuryId} was not found.";
-                }                
+                    throw new BadHttpRequestException($"Treasury with the Id {treasuryId} was not found.");
+                }
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException
+                || ex is BadHttpRequestException)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return BadRequest(_response);
             }
             catch (Exception ex)
             {
@@ -611,12 +675,15 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
 
-            return _response;
+            return Ok(_response);
         }
 
         [HttpPatch]
         [Route("treasuries/{srcTreasuryId:guid}/inventory/{itemId:guid}:sendTo={destTreasuryId:guid}")]
-        public ResponseDto MoveItem(Guid srcTreasuryId, Guid itemId, Guid destTreasuryId)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult MoveItem(Guid srcTreasuryId, Guid itemId, Guid destTreasuryId)
         {
             try
             {
@@ -634,18 +701,22 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                     }
                     else //targetItem == null
                     {
-                        _response.IsSuccess = false;
-                        _response.Message = $"Item with the Id {itemId} was not found in " +
-                            $"the treasury \"{srcTreasury.Name}\" [id:{srcTreasuryId}].";
+                        throw new BadHttpRequestException($"Item with the Id {itemId} was not found in " +
+                            $"the treasury \"{srcTreasury.Name}\" [id:{srcTreasuryId}].");
                     }
                 }
                 else //srcTreasury and/or destTreasury is null
                 {
-                    _response.IsSuccess = false;
-                    _response.Message = "One or more requested treasuries was not found.";
-                }
-
-                
+                    throw new BadHttpRequestException("One or more requested treasuries was not found.");
+                }    
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException
+                || ex is BadHttpRequestException)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return BadRequest(_response);
             }
             catch (Exception ex)
             {
@@ -654,7 +725,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
 
-            return _response;
+            return Ok(_response);
         }
 
         //-----------------------------------Delete Endpoints---------------------------------
