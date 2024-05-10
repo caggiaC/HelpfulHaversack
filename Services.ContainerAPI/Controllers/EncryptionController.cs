@@ -1,6 +1,7 @@
 ﻿using HelpfulHaversack.Services.ContainerAPI.Util;
 using Microsoft.AspNetCore.Mvc;
 using Services.ContainerAPI.Models.Dto;
+using System.Security.Cryptography;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Controllers
 {
