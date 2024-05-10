@@ -22,7 +22,6 @@ namespace HelpfulHaversack.Web.Services
         //Methods
         public async Task<ResponseDto?> GetAllTreasuriesAsync()
         {
-            Console.WriteLine(_urlBase + "treasuries");
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticDetails.ApiType.GET,

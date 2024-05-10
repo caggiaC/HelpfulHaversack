@@ -6,7 +6,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
 {
 	[ApiController]
 	[Route("Encryption")]
-	public class EncryptionController : Controller
+	public class EncryptionController : ControllerBase
 	{
 		private readonly RsaHelper _rsaHelper = RsaHelper.Instance;
 		private readonly ResponseDto _response;
@@ -22,7 +22,9 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
 		//End Dependency Injection
 
 		[HttpGet]
-		public ResponseDto GetPublicKey()
+		[ProducesResponseType(StatusCodes.Status200OK)]
+		[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+		public IActionResult GetPublicKey()
 		{
 			try
 			{
@@ -33,10 +35,10 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
 			{
 				_response.IsSuccess = false;
 				_response.Message = ex.Message;
-			}
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
 
-			return _response;
-
+			return Ok(_response);
 		}
 	}
 }
