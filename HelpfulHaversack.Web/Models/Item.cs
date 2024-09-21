@@ -14,6 +14,8 @@ namespace HelpfulHaversack.Web.Models
         public new string Name { get; set; } = "A New Item";
         public string DisplayName { get; set; } = "A New Item";
 
+        public int Quantitiy { get; set; } = 1;
+
         public Item() : base ("Item Instance")
         {
             _id = Guid.NewGuid();

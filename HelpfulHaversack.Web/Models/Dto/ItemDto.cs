@@ -13,5 +13,6 @@ namespace HelpfulHaversack.Web.Models.Dto
         public double Value { get; set; }
         public ItemRarity Rarity { get; set; }
         public ItemType Type { get; set; }
+        public int Quantity { get; set; }
     }
 }
