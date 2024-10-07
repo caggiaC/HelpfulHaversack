@@ -32,5 +32,21 @@ namespace HelpfulHaversack.Web.Controllers
 
 			return View(list);
 		}
+
+		public async Task<IActionResult> TreasuryManage(Guid treasuryId)
+		{
+			TreasuryDto? treasury = new();
+
+			ResponseDto? response = await _treasuryService.GetTreasuryAsync(treasuryId);
+
+			if(response != null && response.IsSuccess) 
+			{
+				var responseString = Convert.ToString(response.Result);
+				if(responseString != null)
+					treasury = JsonConvert.DeserializeObject<TreasuryDto>(responseString);
+			}
+
+			return View(treasury);
+		}
 	}
 }
