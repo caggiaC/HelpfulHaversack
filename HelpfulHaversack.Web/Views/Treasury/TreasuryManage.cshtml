@@ -1,5 +1,69 @@
 ﻿@using HelpfulHaversack.Web.Models.Dto
 @model TreasuryDto
 @{
-    <h1>@Model.Name</h1>
+    <div class="card shadow border-0 mt-4">
+		<div class="card-header bg-secondary bg-gradient ml-0 py-3">
+			<div class="row">
+				<div class="col-12 text-center">
+					<h1 class="text-white">@Model.Name</h1>
+				</div>
+			</div>
+		</div>
+		<div class="card-body">
+		<h1>Items</h1>
+			<div class="container">
+				<table>
+				<thead>
+					<tr>
+						<div class="row border-bottom border-black">
+							<div class="col">
+								Name
+							</div>
+							<div class="col">
+								Quantity
+							</div>
+							<div class="col">
+								Weight (lbs.)
+							</div>
+							<div class="col">
+								Value
+							</div>
+							<div class="col">
+								Type
+							</div>
+							<div class="col">
+								Rarity
+							</div>
+						</div>
+					</tr>
+				</thead>
+					<tbody>
+						@foreach(var item in Model.Inventory)
+						{
+							<div class="row subRow">
+								<div class="col">
+									@item.Name
+								</div>
+								<div class="col">
+									x1
+								</div>
+								<div class="col">
+									@item.Weight
+								</div>
+								<div class="col">
+									@item.Value
+								</div>
+								<div class="col">
+									@item.Type
+								</div>
+								<div class="col">
+									@item.Rarity
+								</div>
+							</div>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 }
