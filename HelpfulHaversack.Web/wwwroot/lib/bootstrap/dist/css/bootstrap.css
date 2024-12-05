@@ -13870,14 +13870,5 @@ pre {
     background-color: lightgray;
     cursor: pointer
 }
-
-.subRow:hover + .col {
-    background-color: red;
-}
-
-.subRow:hover + col {
-    visibility: visible
-}
-
-
+    
 /*# sourceMappingURL=bootstrap.min.css.map */
