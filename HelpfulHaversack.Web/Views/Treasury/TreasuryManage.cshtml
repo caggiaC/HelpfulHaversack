@@ -40,7 +40,7 @@
 					<tbody>
 						@foreach(var item in Model.Inventory)
 						{
-							<div class="row subRow">
+                            <div class="row subRow" data-bs-toggle="modal" data-bs-target="#itemModal-@item.ItemId" style="cursor: pointer;">
 								<div class="col">
 									@item.Name
 								</div>
@@ -60,6 +60,24 @@
 									@item.Rarity
 								</div>
 							</div>
+
+                            <div class="modal fade" id="itemModal-@item.ItemId" tabindex="-1" aria-labelledby="itemModalLabel-@item.ItemId" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="itemModalLabel-@item.ItemId">@item.Name</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><strong>Quantity:</strong> x1</p>
+                                            <p><strong>Weight:</strong> @item.Weight lbs.</p>
+                                            <p><strong>Value:</strong> @item.Value</p>
+                                            <p><strong>Type:</strong> @item.Type</p>
+                                            <p><strong>Rarity:</strong> @item.Rarity</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 						}
 					</tbody>
 				</table>
