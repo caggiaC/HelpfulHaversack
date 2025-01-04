@@ -132,9 +132,27 @@
                                                     </div>
                                                 </div>
                                             </div>
-											<button type="button" class="btn btn-danger">
-												<i class="bi bi-trash"></i> Delete
-											</button>
+                                            <button type="button" class="btn btn-danger" id="deleteButton-@item.ItemId" onclick="confirmDelete('@item.ItemId')">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+
+                                            <script>
+                                                function confirmDelete(itemId) {
+                                                    var button = document.getElementById('deleteButton-' + itemId);
+                                                    if (button.innerText.trim() === 'Delete') {
+                                                        button.innerHTML = '<i class="bi bi-trash"></i> Confirm Delete?';
+                                                    } else {
+                                                        // Restore button to initial state
+                                                        button.innerHTML = '<i class="bi bi-trash"></i> Delete';
+                                                        // Close the modal
+                                                        var modal = bootstrap.Modal.getInstance(document.getElementById('itemModal-' + itemId));
+                                                        
+
+                                                        alert('Item deleted');
+                                                        modal.hide();
+                                                    }
+                                                }
+                                            </script>
 										</div>
                                     </div>
                                 </div>
