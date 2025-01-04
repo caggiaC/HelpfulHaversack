@@ -40,8 +40,15 @@
 					<tbody>
 						@foreach(var item in Model.Inventory)
 						{
+							//TODO: move to style sheet
+                            <style>
+                                .subRow:hover {
+                                    background-color: #f0f0f0;
+                                }
+                            </style>
+
                             <div class="row subRow" data-bs-toggle="modal" data-bs-target="#itemModal-@item.ItemId" style="cursor: pointer;">
-								<div class="col">
+                                <div class="col">
 									@item.Name
 								</div>
 								<div class="col">
@@ -75,6 +82,60 @@
                                             <p><strong>Type:</strong> @item.Type</p>
                                             <p><strong>Rarity:</strong> @item.Rarity</p>
                                         </div>
+                                        <div class="modal-footer">
+											<button type="button" class="btn btn-info">
+												<i class="bi-arrow-left-right"></i> Transfer
+											</button>
+                                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editItemModal-@item.ItemId" data-bs-dismiss="modal">
+                                                <i class="bi-wrench"></i> Edit
+                                            </button>
+
+                                            <div class="modal fade" id="editItemModal-@item.ItemId" tabindex="-1" aria-labelledby="editItemModalLabel-@item.ItemId" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="editItemModalLabel-@item.ItemId">Edit @item.Name</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form>
+                                                                <div class="mb-3">
+                                                                    <label for="itemName-@item.ItemId" class="form-label">Name</label>
+                                                                    <input type="text" class="form-control" id="itemName-@item.ItemId" value="@item.Name">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="itemQuantity-@item.ItemId" class="form-label">Quantity</label>
+                                                                    <input type="number" class="form-control" id="itemQuantity-@item.ItemId" value="1">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="itemWeight-@item.ItemId" class="form-label">Weight (lbs.)</label>
+                                                                    <input type="text" class="form-control" id="itemWeight-@item.ItemId" value="@item.Weight">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="itemValue-@item.ItemId" class="form-label">Value</label>
+                                                                    <input type="text" class="form-control" id="itemValue-@item.ItemId" value="@item.Value">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="itemType-@item.ItemId" class="form-label">Type</label>
+                                                                    <input type="text" class="form-control" id="itemType-@item.ItemId" value="@item.Type">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="itemRarity-@item.ItemId" class="form-label">Rarity</label>
+                                                                    <input type="text" class="form-control" id="itemRarity-@item.ItemId" value="@item.Rarity">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard Changes</button>
+                                                            <button type="button" class="btn btn-success">Save changes</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+											<button type="button" class="btn btn-danger">
+												<i class="bi bi-trash"></i> Delete
+											</button>
+										</div>
                                     </div>
                                 </div>
                             </div>
