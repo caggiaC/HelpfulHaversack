@@ -1,6 +1,6 @@
-﻿using Services.ContainerAPI.Models.Dto;
+﻿using HelpfulHaversack.Web.Models.Dto;
 
-namespace HelpfulHaversack.Services.ContainerAPI.Models.View
+namespace HelpfulHaversack.Web.Models.View
 {
     public class TreasuryManageViewModel
     {
