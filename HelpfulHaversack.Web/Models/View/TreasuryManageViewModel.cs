@@ -1,4 +1,5 @@
 ﻿using HelpfulHaversack.Web.Models.Dto;
+using HelpfulHaversack.Web.Models.View;
 
 namespace HelpfulHaversack.Web.Models.View
 {
@@ -6,6 +7,6 @@ namespace HelpfulHaversack.Web.Models.View
     {
         public TreasuryDto? Treasury { get; set; }
 
-        public List<TreasuryDto>? TreasuryList { get; set; }
+        public List<TreasuryReference>? TreasuryList { get; set; }
     }
 }
