@@ -7,6 +7,7 @@ using Services.ContainerAPI.Util;
 using HelpfulHaversack.Services.ContainerAPI.Data;
 using HelpfulHaversack.Services.ContainerAPI.Models.Dto;
 using HelpfulHaversack.Services.ContainerAPI.Util;
+using HelpfulHaversack.Services.ContainerAPI.Models;
 
 namespace HelpfulHaversack.Services.ContainerAPI.Controllers
 {
@@ -19,6 +20,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         private readonly TreasuryStore _treasuryStore;
         private readonly RsaHelper _rsaHelper;
         private readonly TimedStateService _timedStateService;
+        private readonly List<TreasuryReference> _treasuryReferences;
 
         //Dependency Injection
 
@@ -28,6 +30,8 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             _response = new ResponseDto();
             _templates = ItemTemplateSet.Instance;
             _treasuryStore = TreasuryStore.Instance;
+            _treasuryReferences = _treasuryStore.GetTreasuryReferences();
+
             _rsaHelper = RsaHelper.Instance;
 
             _timedStateService = new();
@@ -58,6 +62,27 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
 
             //return _rsaHelper.Encrypt(JsonFileHandler.Serialize<ResponseDto>(_response, <targetKey>));
+        }
+
+        [HttpGet]
+        [Route("References")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetTreasuryReferences()
+        {
+            try
+            {
+                _response.Result = _treasuryReferences;
+                _response.Message = "Retrieved all treasury references.";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+
+            return Ok(_response);
         }
 
         [HttpGet]

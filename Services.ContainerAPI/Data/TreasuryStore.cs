@@ -137,6 +137,22 @@ namespace Services.ContainerAPI.Data
         }
 
         /// <summary>
+        /// Returns a list of TreasuryReference objects for each Treasury in the set.
+        /// </summary>
+        /// <returns>A List of TreasuryReference objects.</returns>
+        public List<TreasuryReference> GetTreasuryReferences()
+        {
+            List<TreasuryReference> referenceList = new();
+
+            foreach (Treasury treasury in _treasuries)
+            {
+                referenceList.Add(TreasuryReference.CreateReference(treasury));
+            }
+
+            return referenceList;
+        }
+
+        /// <summary>
         /// Writes the current set to a file
         /// </summary>
         public void Save()
