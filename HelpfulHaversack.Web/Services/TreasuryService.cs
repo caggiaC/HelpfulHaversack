@@ -29,6 +29,15 @@ namespace HelpfulHaversack.Web.Services
             });
         }
 
+        public async Task<ResponseDto?> GetReferenceListAsync()
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _urlBase + "references"
+            });
+        }
+
         public async Task<ResponseDto?> GetTreasuryAsync(Guid treasuryId)
         {
             return await _baseService.SendAsync(new RequestDto()

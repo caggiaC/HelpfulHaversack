@@ -65,7 +65,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("References")]
+        [Route("references")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetTreasuryReferences()
