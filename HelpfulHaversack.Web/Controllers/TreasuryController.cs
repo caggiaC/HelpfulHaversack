@@ -1,4 +1,6 @@
-﻿using HelpfulHaversack.Web.Models.Dto;
+﻿using HelpfulHaversack.Web.Models;
+using HelpfulHaversack.Web.Models.View;	
+using HelpfulHaversack.Web.Models.Dto;
 using HelpfulHaversack.Web.Services.IService;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -36,6 +38,7 @@ namespace HelpfulHaversack.Web.Controllers
 		public async Task<IActionResult> TreasuryManage(Guid treasuryId)
 		{
 			TreasuryDto? treasury = new();
+			List<TreasuryReference>? references = new();
 
 			ResponseDto? response = await _treasuryService.GetTreasuryAsync(treasuryId);
 
@@ -46,7 +49,19 @@ namespace HelpfulHaversack.Web.Controllers
 					treasury = JsonConvert.DeserializeObject<TreasuryDto>(responseString);
 			}
 
-			return View(treasury);
-		}
+			response = await _treasuryService.GetReferenceListAsync();
+
+			if(response != null && response.IsSuccess)
+			{
+				var responseString = Convert.ToString(response.Result);
+				if(responseString != null)
+                    references = JsonConvert.DeserializeObject<List<TreasuryReference>>(responseString);
+            }
+
+			if(treasury != null && references != null)
+				return View(new TreasuryManageViewModel(treasury, references));
+            else
+                return NotFound("One or more requests were returned empty or containing bad information.");
+        }
 	}
 }

@@ -7,6 +7,7 @@ namespace HelpfulHaversack.Web.Services.IService
     public interface ITreasuryService
     {
         Task<ResponseDto?> GetAllTreasuriesAsync();
+        Task<ResponseDto?> GetReferenceListAsync();
         Task<ResponseDto?> GetTreasuryAsync(Guid treasuryId);
         Task<ResponseDto?> SearchTreasuriesByNameAsync(string treasuryName);
         Task<ResponseDto?> GetAllItemsFromTreasuryAsync(Guid treasuryId);
