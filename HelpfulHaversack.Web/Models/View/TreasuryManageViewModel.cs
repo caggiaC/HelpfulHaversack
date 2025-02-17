@@ -7,9 +7,9 @@ namespace HelpfulHaversack.Web.Models.View
     {
         public TreasuryDto Treasury { get; set; }
 
-        public List<TreasuryReference> TreasuryList { get; set; }
+        public List<TreasuryReferenceDto> TreasuryList { get; set; }
 
-        public TreasuryManageViewModel(TreasuryDto treasuryDto, List<TreasuryReference> treasuryList)
+        public TreasuryManageViewModel(TreasuryDto treasuryDto, List<TreasuryReferenceDto> treasuryList)
         {
             Treasury = treasuryDto;
             TreasuryList = treasuryList;

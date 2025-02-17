@@ -72,7 +72,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         {
             try
             {
-                _response.Result = _treasuryReferences;
+                _response.Result = Mapper.TreasuryReferenceToDto(_treasuryReferences);
                 _response.Message = "Retrieved all treasury references.";
             }
             catch (Exception ex)

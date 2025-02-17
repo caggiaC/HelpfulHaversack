@@ -27,13 +27,13 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
                 throw new ArgumentException("Treasury must have a valid TreasuryId and Name", nameof(treasury));
         }
 
-        private TreasuryReference(string treasuryName, Guid treasuryId)
+        public TreasuryReference(string treasuryName, Guid treasuryId)
         {
             TreasuryName = treasuryName;
             TreasuryId = treasuryId;
         }
 
-        public string TreasuryName { get; }
-        public Guid TreasuryId { get; }
+        public string TreasuryName { get; set; }
+        public Guid TreasuryId { get; set; }
     }
 }

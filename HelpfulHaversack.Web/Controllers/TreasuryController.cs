@@ -38,7 +38,7 @@ namespace HelpfulHaversack.Web.Controllers
 		public async Task<IActionResult> TreasuryManage(Guid treasuryId)
 		{
 			TreasuryDto? treasury = new();
-			List<TreasuryReference>? references = new();
+			List<TreasuryReferenceDto>? references = new();
 
 			ResponseDto? response = await _treasuryService.GetTreasuryAsync(treasuryId);
 
@@ -55,7 +55,7 @@ namespace HelpfulHaversack.Web.Controllers
 			{
 				var responseString = Convert.ToString(response.Result);
 				if(responseString != null)
-                    references = JsonConvert.DeserializeObject<List<TreasuryReference>>(responseString);
+                    references = JsonConvert.DeserializeObject<List<TreasuryReferenceDto>>(responseString);
             }
 
 			if(treasury != null && references != null)
