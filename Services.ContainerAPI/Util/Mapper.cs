@@ -303,5 +303,47 @@ namespace Services.ContainerAPI.Util
             return returnList;
         }
 
+        //---------------------------------| TreasuryReference => Dto |----------------------------
+
+        /// <summary>
+        ///   
+        /// </summary>
+        /// <param name="treasuryReference"></param>
+        /// <returns></returns>
+        public static TreasuryReferenceDto TreasuryReferenceToDto(TreasuryReference treasuryReference)
+        {
+            return new TreasuryReferenceDto
+            {
+                TreasuryId = treasuryReference.TreasuryId,
+                TreasuryName = treasuryReference.TreasuryName
+            };
+        }
+
+        public static List<TreasuryReferenceDto> TreasuryReferenceToDto(IEnumerable<TreasuryReference> treasuryReference_list)
+        {
+            List<TreasuryReferenceDto> returnList = new();
+
+            foreach (TreasuryReference treasuryReference in treasuryReference_list)
+                returnList.Add(TreasuryReferenceToDto(treasuryReference));
+
+            return returnList;
+        }
+
+        //---------------------------------| Dto => TreasuryReference |----------------------------
+
+        public static TreasuryReference DtoToTreasuryReference(TreasuryReferenceDto dto)
+        {
+            return new TreasuryReference(dto.TreasuryName, dto.TreasuryId);
+        }
+
+        public static List<TreasuryReference> DtoToTreasuryReference(IEnumerable<TreasuryReferenceDto> dto_list)
+        {
+            List<TreasuryReference> returnList = new();
+
+            foreach (TreasuryReferenceDto dto in dto_list)
+                returnList.Add(DtoToTreasuryReference(dto));
+
+            return returnList;
+        }
     }
 }

@@ -91,6 +91,5 @@ namespace HelpfulHaversack.Services.Web.Util
                 Verification = Encrypt(plainText, _privateKey)
             };
         }
-
-    }
+	}
 }

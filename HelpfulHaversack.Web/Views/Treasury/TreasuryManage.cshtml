@@ -1,11 +1,12 @@
-﻿@using HelpfulHaversack.Web.Models.Dto
-@model TreasuryDto
+﻿@using HelpfulHaversack.Web.Models.View
+@using HelpfulHaversack.Web.Models.Dto
+@model TreasuryManageViewModel
 @{
     <div class="card shadow border-0 mt-4">
 		<div class="card-header bg-secondary bg-gradient ml-0 py-3">
 			<div class="row">
 				<div class="col-12 text-center">
-					<h1 class="text-white">@Model.Name</h1>
+					<h1 class="text-white">@Model.Treasury.Name</h1>
 				</div>
 			</div>
 		</div>
@@ -38,10 +39,17 @@
 					</tr>
 				</thead>
 					<tbody>
-						@foreach(var item in Model.Inventory)
+                        @foreach (var item in Model.Treasury.Inventory)
 						{
-							<div class="row subRow">
-								<div class="col">
+							//TODO: move to style sheet
+                            <style>
+                                .subRow:hover {
+                                    background-color: #f0f0f0;
+                                }
+                            </style>
+
+                            <div class="row subRow" data-bs-toggle="modal" data-bs-target="#itemModal-@item.ItemId" style="cursor: pointer;">
+                                <div class="col">
 									@item.Name
 								</div>
 								<div class="col">
@@ -60,6 +68,111 @@
 									@item.Rarity
 								</div>
 							</div>
+
+                            <div class="modal fade" id="itemModal-@item.ItemId" tabindex="-1" aria-labelledby="itemModalLabel-@item.ItemId" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="itemModalLabel-@item.ItemId">@item.Name</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><strong>Quantity:</strong> x1</p>
+                                            <p><strong>Weight:</strong> @item.Weight lbs.</p>
+                                            <p><strong>Value:</strong> @item.Value</p>
+                                            <p><strong>Type:</strong> @item.Type</p>
+                                            <p><strong>Rarity:</strong> @item.Rarity</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi-arrow-left-right"></i> Transfer
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                @foreach (var treasury in Model.TreasuryList)
+                                                {
+                                                    <li>
+                                                        <a class="dropdown-item" href="#" onclick="transferItem('@item.ItemId', '@treasury.TreasuryId')">@treasury.TreasuryName</a>
+                                                    </li>
+                                                }
+                                            </ul>
+
+                                            <script>
+                                                function transferItem(itemId, treasuryId) {
+                                                    // Implement the transfer logic here
+                                                    alert('Transferring item ' + itemName + ' to treasury ' + treasuryName);
+                                                }
+                                            </script>
+                                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editItemModal-@item.ItemId" data-bs-dismiss="modal">
+                                                <i class="bi-wrench"></i> Edit
+                                            </button>
+
+                                            <div class="modal fade" id="editItemModal-@item.ItemId" tabindex="-1" aria-labelledby="editItemModalLabel-@item.ItemId" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="editItemModalLabel-@item.ItemId">Edit @item.Name</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form>
+                                                                <div class="mb-3">
+                                                                    <label for="itemName-@item.ItemId" class="form-label">Name</label>
+                                                                    <input type="text" class="form-control" id="itemName-@item.ItemId" value="@item.Name">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="itemQuantity-@item.ItemId" class="form-label">Quantity</label>
+                                                                    <input type="number" class="form-control" id="itemQuantity-@item.ItemId" value="1">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="itemWeight-@item.ItemId" class="form-label">Weight (lbs.)</label>
+                                                                    <input type="text" class="form-control" id="itemWeight-@item.ItemId" value="@item.Weight">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="itemValue-@item.ItemId" class="form-label">Value</label>
+                                                                    <input type="text" class="form-control" id="itemValue-@item.ItemId" value="@item.Value">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="itemType-@item.ItemId" class="form-label">Type</label>
+                                                                    <input type="text" class="form-control" id="itemType-@item.ItemId" value="@item.Type">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="itemRarity-@item.ItemId" class="form-label">Rarity</label>
+                                                                    <input type="text" class="form-control" id="itemRarity-@item.ItemId" value="@item.Rarity">
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Discard Changes</button>
+                                                            <button type="button" class="btn btn-success">Save changes</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="button" class="btn btn-danger" id="deleteButton-@item.ItemId" onclick="confirmDelete('@item.ItemId')">
+                                                <i class="bi bi-trash"></i> Delete
+                                            </button>
+
+                                            <script>
+                                                function confirmDelete(itemId) {
+                                                    var button = document.getElementById('deleteButton-' + itemId);
+                                                    if (button.innerText.trim() === 'Delete') {
+                                                        button.innerHTML = '<i class="bi bi-trash"></i> Confirm Delete?';
+                                                    } else {
+                                                        // Restore button to initial state
+                                                        button.innerHTML = '<i class="bi bi-trash"></i> Delete';
+                                                        // Close the modal
+                                                        var modal = bootstrap.Modal.getInstance(document.getElementById('itemModal-' + itemId));
+                                                        
+
+                                                        alert('Item deleted');
+                                                        modal.hide();
+                                                    }
+                                                }
+                                            </script>
+										</div>
+                                    </div>
+                                </div>
+                            </div>
 						}
 					</tbody>
 				</table>
