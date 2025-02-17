@@ -84,9 +84,24 @@
                                             <p><strong>Rarity:</strong> @item.Rarity</p>
                                         </div>
                                         <div class="modal-footer">
-											<button type="button" class="btn btn-info">
-												<i class="bi-arrow-left-right"></i> Transfer
-											</button>
+                                            <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="bi-arrow-left-right"></i> Transfer
+                                            </button>
+                                            <ul class="dropdown-menu">
+                                                @foreach (var treasury in Model.TreasuryList)
+                                                {
+                                                    <li>
+                                                        <a class="dropdown-item" href="#" onclick="transferItem('@item.ItemId', '@treasury.TreasuryId')">@treasury.TreasuryName</a>
+                                                    </li>
+                                                }
+                                            </ul>
+
+                                            <script>
+                                                function transferItem(itemId, treasuryId) {
+                                                    // Implement the transfer logic here
+                                                    alert('Transferring item ' + itemName + ' to treasury ' + treasuryName);
+                                                }
+                                            </script>
                                             <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editItemModal-@item.ItemId" data-bs-dismiss="modal">
                                                 <i class="bi-wrench"></i> Edit
                                             </button>
