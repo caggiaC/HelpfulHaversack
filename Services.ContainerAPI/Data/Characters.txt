@@ -1,0 +1,1 @@
+{"_id":"5fc3872e-c3e0-4a26-a0e1-f3eb398d1507","CharacterId":"5fc3872e-c3e0-4a26-a0e1-f3eb398d1507","InventoryId":"00000000-0000-0000-0000-000000000001","Name":"Test Character Persistent","Xp":0,"Class":"Fighter","MaxHP":10,"CurrentHp":10,"ArmorClass":11,"Str":16,"Dex":12,"Con":14,"Wis":10,"Int":8,"Cha":8}

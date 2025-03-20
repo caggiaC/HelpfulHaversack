@@ -233,6 +233,7 @@ namespace Services.ContainerAPI.Util
             {
                 CharacterId = character.CharacterId,
                 InventoryId = character.InventoryId,
+                Name = character.Name,
                 Xp = character.Xp,
                 Class = character.Class,
                 MaxHP = character.MaxHP,
@@ -275,6 +276,7 @@ namespace Services.ContainerAPI.Util
             {
                 InventoryId = dto.InventoryId,
                 Xp = dto.Xp,
+                Name = dto.Name,
                 Class = dto.Class,
                 MaxHP = dto.MaxHP,
                 CurrentHp = dto.CurrentHp,

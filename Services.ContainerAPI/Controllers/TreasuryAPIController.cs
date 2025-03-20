@@ -18,6 +18,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         private readonly ResponseDto _response;
         private readonly ItemTemplateSet _templates;
         private readonly TreasuryStore _treasuryStore;
+        private readonly CharacterStore _characterStore;
         private readonly RsaHelper _rsaHelper;
         private readonly TimedStateService _timedStateService;
         private readonly List<TreasuryReference> _treasuryReferences;
@@ -30,6 +31,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             _response = new ResponseDto();
             _templates = ItemTemplateSet.Instance;
             _treasuryStore = TreasuryStore.Instance;
+            _characterStore = CharacterStore.Instance;
             _treasuryReferences = _treasuryStore.GetTreasuryReferences();
 
             _rsaHelper = RsaHelper.Instance;
@@ -62,6 +64,27 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
 
             //return _rsaHelper.Encrypt(JsonFileHandler.Serialize<ResponseDto>(_response, <targetKey>));
+        }
+
+        [HttpGet]
+        [Route("Characters")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetAllCharacters()
+        {
+            try
+            {
+                _response.Result = Mapper.CharacterToDto(_characterStore.GetAllCharacters());
+                _response.Message = "Retrieved all characters.";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+
+            return Ok(_response);
         }
 
         [HttpGet]
