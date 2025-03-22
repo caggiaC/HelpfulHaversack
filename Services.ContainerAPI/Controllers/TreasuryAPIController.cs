@@ -340,7 +340,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("templates/search={templateName}")]
+        [Route("templates/search={templateName:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult SearchItemTemplate(string templateName)
@@ -362,6 +362,38 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpGet]
+        [Route("characters/search={characterId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetCharacter(Guid characterId)
+        {
+            try
+            {
+                Character? character  = _characterStore.GetCharacter(characterId);
+                if(character != null)
+                {
+                    _response.Result = Mapper.CharacterToDto(character);
+                    _response.Message = $"Retrieved the character {character.Name} [id:{character.CharacterId}].";
+                }
+                else
+                {
+                    _response.Result = null;
+                    _response.IsSuccess = false;
+                    _response.Message = $"Character with the Id {characterId} was not found.";
+                    return BadRequest(_response);
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+
+            return Ok(_response);
+        }
 
         //-----------------------------------Post Endpoints-----------------------------------
         [HttpPost]
@@ -905,6 +937,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             private Timer? _timer;
             private bool _treasuryStoreModified;
             private bool _templateSetModified;
+            private bool _characterStoreModified;
             private bool _locked;
 
             public TimedStateService() 
@@ -913,6 +946,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 _treasuries = TreasuryStore.Instance;
                 _treasuryStoreModified = false;
                 _templateSetModified = false;
+                _characterStoreModified = false;
                 _timer = null;
                 _locked = false;
             }
@@ -942,6 +976,14 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                     _treasuryStoreModified = false;
                     _locked = false;
                 }
+
+                if(_characterStoreModified && !_locked)
+                {
+                    _locked = true;
+                    CharacterStore.Instance.Save();
+                    _characterStoreModified = false;
+                    _locked = false;
+                }
             }
 
             public Task StopAsync(CancellationToken cancellationToken)
@@ -954,6 +996,8 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             public void SetTreasuryStoreModified() { _treasuryStoreModified = true; }
 
             public void SetTemplateSetModified() { _templateSetModified = true; }
+
+            public void SetCharacterStoreModified() { _characterStoreModified = true; }
         }
     }
 }

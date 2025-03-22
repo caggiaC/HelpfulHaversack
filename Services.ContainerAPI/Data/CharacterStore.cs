@@ -50,6 +50,11 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
             _characters.Remove(character);
         }
 
+        public void Save()
+        {
+            WriteToFile("./Data/");
+        }
+
         private static void SeedList()
         {
             Character temp = new()
