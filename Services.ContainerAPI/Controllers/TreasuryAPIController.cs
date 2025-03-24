@@ -67,7 +67,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("Characters")]
+        [Route("characters")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetAllCharacters()
@@ -340,7 +340,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("templates/search={templateName:guid}")]
+        [Route("templates/search={templateName}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult SearchItemTemplate(string templateName)
@@ -392,6 +392,29 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, _response);
             }
 
+            return Ok(_response);
+        }
+
+        [HttpGet]
+        [Route("characters/search={characterName")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult SearchCharacter(string characterName)
+        {
+            try
+            {
+                _response.Result = _characterStore.GetAllCharacters().FindAll(
+                    t => t.Name.ToLower().Contains(characterName.ToLower()));
+
+                _response.Message = "Retrieved all characters with a name containing \"{characterName}\".";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
             return Ok(_response);
         }
 
@@ -470,6 +493,40 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpPost]
+        [Route("create/character:{characterName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult CreateCharacter(string characterName)
+        {
+            try
+            {
+                if(characterName == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"Character name must not be null.";
+                    _response.Result = null;
+
+                    return BadRequest(_response);
+                }
+                
+                _response.Result = _characterStore.AddCharacter(
+                    new Character() { Name = characterName });
+
+                _response.Message = $"Created character \"{characterName}.\"";
+
+                _timedStateService.SetCharacterStoreModified();
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                _response.Result = null;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+            return Ok(_response);
+        }
 
         //-----------------------------------Put Endpoints------------------------------------
         [HttpPut]

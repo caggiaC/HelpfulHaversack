@@ -34,10 +34,11 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
             return _characters.FindAll(c => c.Name.ToLower().Contains(characterName.ToLower()));
         }
 
-        public void AddCharacter(Character character)
+        public Character AddCharacter(Character character)
         {
             if (_characters.Contains(character)) { throw new ArgumentException("Character with this ID already exists."); }
             _characters.Add(character);
+            return character;
         }   
 
         public void RemoveCharacter(Guid characterId)
