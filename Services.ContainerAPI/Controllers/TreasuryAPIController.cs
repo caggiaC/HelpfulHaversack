@@ -658,6 +658,42 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpPut]
+        [Route("characters/{characterId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateCharacter(Guid characterId, [FromBody] CharacterDto characterDto)
+        {
+            try
+            {
+                if(characterDto == null || characterId == Guid.Empty)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Either the ID or Data Transfer Object was missing.";
+                    _response.Result = null;
+
+                    return BadRequest(_response);
+                }
+
+                _characterStore.RemoveCharacter(characterId);
+                _response.Result =
+                    _characterStore.AddCharacter(Mapper.DtoToCharacter(characterDto));
+
+                _response.IsSuccess = true;
+                _response.Message = $"Updated character {characterDto.Name} [ID:{characterId}]." +
+                    $" Entire resource was affected.";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                _response.Result = null;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+
+            return Ok(_response);
+        }
 
         //-----------------------------------Patch Endpoints----------------------------------
         [HttpPatch]
