@@ -1021,12 +1021,42 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpDelete]
+        [Route("characters/{charaterId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult DeleteCharacter(Guid characterId)
+        {
+            try
+            {
+                if(characterId == Guid.Empty)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Character ID must not be empty.";
+                    _response.Result = null;
+
+                    return BadRequest(_response);
+                }
+
+                _characterStore.RemoveCharacter(characterId);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Result = null;
+                _response.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+            return Ok(_response);
+        }
 
         //-----------------------------------Background Services------------------------------
         private class TimedStateService : IHostedService
         {
             private readonly ItemTemplateSet _templates;
             private readonly TreasuryStore _treasuries;
+            private readonly CharacterStore _characters;
             private Timer? _timer;
             private bool _treasuryStoreModified;
             private bool _templateSetModified;
@@ -1037,6 +1067,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             {
                 _templates = ItemTemplateSet.Instance;
                 _treasuries = TreasuryStore.Instance;
+                _characters = CharacterStore.Instance;
                 _treasuryStoreModified = false;
                 _templateSetModified = false;
                 _characterStoreModified = false;
@@ -1073,7 +1104,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                 if(_characterStoreModified && !_locked)
                 {
                     _locked = true;
-                    CharacterStore.Instance.Save();
+                    _characters.Save();
                     _characterStoreModified = false;
                     _locked = false;
                 }
