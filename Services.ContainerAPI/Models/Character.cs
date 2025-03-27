@@ -9,6 +9,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
 
         public Guid CharacterId { get { return _id; } }
         public Guid InventoryId { get; set; }
+        public string Name { get; set; } = "Jarro Lightfeather";
         public int Xp { get; set; } = 0;
         public string Class { get; set; } = String.Empty;
         public int MaxHP { get; set; } = 0;
@@ -31,6 +32,18 @@ namespace HelpfulHaversack.Services.ContainerAPI.Models
         public Character(Guid CharacterId)
         {
             _id = CharacterId;
+        }
+
+        public override bool Equals(Object? obj)
+        {
+            if (obj == null) return false;
+            try { return ((Character)obj).CharacterId == _id; }
+            catch { return false; }
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
         }
     }
 }

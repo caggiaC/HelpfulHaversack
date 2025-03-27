@@ -18,6 +18,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         private readonly ResponseDto _response;
         private readonly ItemTemplateSet _templates;
         private readonly TreasuryStore _treasuryStore;
+        private readonly CharacterStore _characterStore;
         private readonly RsaHelper _rsaHelper;
         private readonly TimedStateService _timedStateService;
         private readonly List<TreasuryReference> _treasuryReferences;
@@ -30,6 +31,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             _response = new ResponseDto();
             _templates = ItemTemplateSet.Instance;
             _treasuryStore = TreasuryStore.Instance;
+            _characterStore = CharacterStore.Instance;
             _treasuryReferences = _treasuryStore.GetTreasuryReferences();
 
             _rsaHelper = RsaHelper.Instance;
@@ -62,6 +64,27 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
 
             //return _rsaHelper.Encrypt(JsonFileHandler.Serialize<ResponseDto>(_response, <targetKey>));
+        }
+
+        [HttpGet]
+        [Route("characters")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetAllCharacters()
+        {
+            try
+            {
+                _response.Result = Mapper.CharacterToDto(_characterStore.GetAllCharacters());
+                _response.Message = "Retrieved all characters.";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+
+            return Ok(_response);
         }
 
         [HttpGet]
@@ -339,6 +362,61 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpGet]
+        [Route("characters/search={characterId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult GetCharacter(Guid characterId)
+        {
+            try
+            {
+                Character? character  = _characterStore.GetCharacter(characterId);
+                if(character != null)
+                {
+                    _response.Result = Mapper.CharacterToDto(character);
+                    _response.Message = $"Retrieved the character {character.Name} [id:{character.CharacterId}].";
+                }
+                else
+                {
+                    _response.Result = null;
+                    _response.IsSuccess = false;
+                    _response.Message = $"Character with the Id {characterId} was not found.";
+                    return BadRequest(_response);
+                }
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+
+            return Ok(_response);
+        }
+
+        [HttpGet]
+        [Route("characters/search={characterName")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult SearchCharacter(string characterName)
+        {
+            try
+            {
+                _response.Result = _characterStore.GetAllCharacters().FindAll(
+                    t => t.Name.ToLower().Contains(characterName.ToLower()));
+
+                _response.Message = "Retrieved all characters with a name containing \"{characterName}\".";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+            return Ok(_response);
+        }
 
         //-----------------------------------Post Endpoints-----------------------------------
         [HttpPost]
@@ -415,6 +493,40 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpPost]
+        [Route("create/character:{characterName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult CreateCharacter(string characterName)
+        {
+            try
+            {
+                if(characterName == null)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = $"Character name must not be null.";
+                    _response.Result = null;
+
+                    return BadRequest(_response);
+                }
+                
+                _response.Result = _characterStore.AddCharacter(
+                    new Character() { Name = characterName });
+
+                _response.Message = $"Created character \"{characterName}.\"";
+
+                _timedStateService.SetCharacterStoreModified();
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                _response.Result = null;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+            return Ok(_response);
+        }
 
         //-----------------------------------Put Endpoints------------------------------------
         [HttpPut]
@@ -546,6 +658,42 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpPut]
+        [Route("characters/{characterId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateCharacter(Guid characterId, [FromBody] CharacterDto characterDto)
+        {
+            try
+            {
+                if(characterDto == null || characterId == Guid.Empty)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Either the ID or Data Transfer Object was missing.";
+                    _response.Result = null;
+
+                    return BadRequest(_response);
+                }
+
+                _characterStore.RemoveCharacter(characterId);
+                _response.Result =
+                    _characterStore.AddCharacter(Mapper.DtoToCharacter(characterDto));
+
+                _response.IsSuccess = true;
+                _response.Message = $"Updated character {characterDto.Name} [ID:{characterId}]." +
+                    $" Entire resource was affected.";
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                _response.Result = null;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+
+            return Ok(_response);
+        }
 
         //-----------------------------------Patch Endpoints----------------------------------
         [HttpPatch]
@@ -753,6 +901,52 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpPatch]
+        [Route("characters/characterId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateCharacterPartial(Guid characterid, [FromBody] JsonPatchDocument<CharacterDto > patchDto)
+        {
+            try
+            {
+                if (patchDto == null)
+                    throw new BadHttpRequestException("Data Transfer Object was invalid.");
+
+                Character? targetCharacter = _characterStore.GetCharacter(characterid);
+                if (targetCharacter != null)
+                {
+                    CharacterDto targetCharacterDto = Mapper.CharacterToDto(targetCharacter);
+
+                    patchDto.ApplyTo(targetCharacterDto);
+
+                    _characterStore.UpdateCharacter(Mapper.DtoToCharacter(targetCharacterDto));
+
+                    _response.Message = $"Updated character \"{targetCharacterDto.Name}\".";
+                    _timedStateService.SetCharacterStoreModified();
+                }
+                else //targetCharacter == null
+                {
+                    throw new BadHttpRequestException($"Character with the Id {characterid} was not found.");
+                }
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException
+                || ex is BadHttpRequestException)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return BadRequest(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+
+            return Ok(_response);
+        }
         //-----------------------------------Delete Endpoints---------------------------------
         [HttpDelete]
         [Route("treasuries/{treasuryId:guid}")]
@@ -873,23 +1067,56 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpDelete]
+        [Route("characters/{charaterId:guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult DeleteCharacter(Guid characterId)
+        {
+            try
+            {
+                if(characterId == Guid.Empty)
+                {
+                    _response.IsSuccess = false;
+                    _response.Message = "Character ID must not be empty.";
+                    _response.Result = null;
+
+                    return BadRequest(_response);
+                }
+
+                _characterStore.RemoveCharacter(characterId);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Result = null;
+                _response.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+            return Ok(_response);
+        }
 
         //-----------------------------------Background Services------------------------------
         private class TimedStateService : IHostedService
         {
             private readonly ItemTemplateSet _templates;
             private readonly TreasuryStore _treasuries;
+            private readonly CharacterStore _characters;
             private Timer? _timer;
             private bool _treasuryStoreModified;
             private bool _templateSetModified;
+            private bool _characterStoreModified;
             private bool _locked;
 
             public TimedStateService() 
             {
                 _templates = ItemTemplateSet.Instance;
                 _treasuries = TreasuryStore.Instance;
+                _characters = CharacterStore.Instance;
                 _treasuryStoreModified = false;
                 _templateSetModified = false;
+                _characterStoreModified = false;
                 _timer = null;
                 _locked = false;
             }
@@ -919,6 +1146,14 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
                     _treasuryStoreModified = false;
                     _locked = false;
                 }
+
+                if(_characterStoreModified && !_locked)
+                {
+                    _locked = true;
+                    _characters.Save();
+                    _characterStoreModified = false;
+                    _locked = false;
+                }
             }
 
             public Task StopAsync(CancellationToken cancellationToken)
@@ -931,6 +1166,8 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             public void SetTreasuryStoreModified() { _treasuryStoreModified = true; }
 
             public void SetTemplateSetModified() { _templateSetModified = true; }
+
+            public void SetCharacterStoreModified() { _characterStoreModified = true; }
         }
     }
 }
