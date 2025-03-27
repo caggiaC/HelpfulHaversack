@@ -901,6 +901,52 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
             return Ok(_response);
         }
 
+        [HttpPatch]
+        [Route("characters/characterId")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult UpdateCharacterPartial(Guid characterid, [FromBody] JsonPatchDocument<CharacterDto > patchDto)
+        {
+            try
+            {
+                if (patchDto == null)
+                    throw new BadHttpRequestException("Data Transfer Object was invalid.");
+
+                Character? targetCharacter = _characterStore.GetCharacter(characterid);
+                if (targetCharacter != null)
+                {
+                    CharacterDto targetCharacterDto = Mapper.CharacterToDto(targetCharacter);
+
+                    patchDto.ApplyTo(targetCharacterDto);
+
+                    _characterStore.UpdateCharacter(Mapper.DtoToCharacter(targetCharacterDto));
+
+                    _response.Message = $"Updated character \"{targetCharacterDto.Name}\".";
+                    _timedStateService.SetCharacterStoreModified();
+                }
+                else //targetCharacter == null
+                {
+                    throw new BadHttpRequestException($"Character with the Id {characterid} was not found.");
+                }
+            }
+            catch (Exception ex) when (
+                ex is ArgumentException
+                || ex is BadHttpRequestException)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return BadRequest(_response);
+            }
+            catch (Exception ex)
+            {
+                _response.IsSuccess = false;
+                _response.Message = ex.Message;
+                return StatusCode(StatusCodes.Status500InternalServerError, _response);
+            }
+
+            return Ok(_response);
+        }
         //-----------------------------------Delete Endpoints---------------------------------
         [HttpDelete]
         [Route("treasuries/{treasuryId:guid}")]

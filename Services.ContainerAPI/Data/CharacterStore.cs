@@ -51,6 +51,14 @@ namespace HelpfulHaversack.Services.ContainerAPI.Data
             _characters.Remove(character);
         }
 
+        public void UpdateCharacter(Character character)
+        {
+            if (!_characters.Contains(character))
+                throw new ArgumentException($"Character with id {character.CharacterId} does not exist.");
+
+            _characters[_characters.IndexOf(character)] = character;
+        }
+
         public void Save()
         {
             WriteToFile("./Data/");
