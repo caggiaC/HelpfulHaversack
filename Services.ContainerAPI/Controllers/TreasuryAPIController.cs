@@ -667,7 +667,8 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         {
             try
             {
-                if(characterDto == null || characterId == Guid.Empty)
+                if(characterDto == null || characterId == Guid.Empty
+                    || characterDto.CharacterId != characterId)
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Either the ID or Data Transfer Object was missing.";
