@@ -225,39 +225,69 @@ namespace HelpfulHaversack.Web.Services
             });
         }
 
-        public Task<ResponseDto?> GetAllCharactersAsync()
+        public async Task<ResponseDto?> GetAllCharactersAsync()
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _baseService + "characters"
+            });
         }
 
-        public Task<ResponseDto?> GetCharacterAsync(Guid characterId)
+        public async Task<ResponseDto?> GetCharacterAsync(Guid characterId)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _baseService + $"characters/{characterId}"
+            });
         }
 
-        public Task<ResponseDto?> SearchCharacterByNameAsync(string characterName)
+        public async Task<ResponseDto?> SearchCharacterByNameAsync(string characterName)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.GET,
+                ApiUrl = _baseService + $"characters/search={characterName}"
+            });
         }
 
-        public Task<ResponseDto?> CreateCharacterAsync(string characterName)
+        public async Task<ResponseDto?> CreateCharacterAsync(string characterName)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.POST,
+                ApiUrl = _baseService + $"create/character:{characterName}"
+            });
         }
 
-        public Task<ResponseDto?> UpdateCharacterAsync(Guid characterId, CharacterDto characterDto)
+        public async Task<ResponseDto?> UpdateCharacterAsync(Guid characterId, CharacterDto characterDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.PUT,
+                Data = characterDto,
+                ApiUrl = _baseService + $"characters/{characterId}"
+            });
         }
 
-        public Task<ResponseDto?> UpdateCharacterPartialAsync(Guid characterId, JsonPatchDocument<CharacterDto> patchDto)
+        public async Task<ResponseDto?> UpdateCharacterPartialAsync(Guid characterId, JsonPatchDocument<CharacterDto> patchDto)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.PATCH,
+                Data = patchDto,
+                ApiUrl = _baseService + $"characters/{characterId}"
+            });
         }
 
-        public Task<ResponseDto?> DeleteCharacterAsync(Guid characterId)
+        public async Task<ResponseDto?> DeleteCharacterAsync(Guid characterId)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = StaticDetails.ApiType.DELETE,
+                ApiUrl = _baseService + $"characters/{characterId}"
+            });
         }
     }
 }
