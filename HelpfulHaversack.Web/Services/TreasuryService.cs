@@ -224,5 +224,40 @@ namespace HelpfulHaversack.Web.Services
                 ApiUrl = _baseService + $"templates/{templateName}"
             });
         }
+
+        public Task<ResponseDto?> GetAllCharactersAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResponseDto?> GetCharacterAsync(Guid characterId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResponseDto?> SearchCharacterByNameAsync(string characterName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResponseDto?> CreateCharacterAsync(string characterName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResponseDto?> UpdateCharacterAsync(Guid characterId, CharacterDto characterDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResponseDto?> UpdateCharacterPartialAsync(Guid characterId, JsonPatchDocument<CharacterDto> patchDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ResponseDto?> DeleteCharacterAsync(Guid characterId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
