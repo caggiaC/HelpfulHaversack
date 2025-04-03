@@ -35,6 +35,35 @@ namespace HelpfulHaversack.Web.Controllers
 			return View(list);
 		}
 
+		public async Task<IActionResult> CharacterIndex(Guid characterId)
+		{
+			CharacterDto? character = new();
+			List<TreasuryReferenceDto>? references = new();
+
+            ResponseDto? response = await _treasuryService.GetCharacterAsync(characterId);
+
+            if (response != null && response.IsSuccess)
+            {
+                var responseString = Convert.ToString(response.Result);
+                if (responseString != null)
+                    character = JsonConvert.DeserializeObject<CharacterDto>(responseString);
+            }
+
+			response = await _treasuryService.GetReferenceListAsync();
+
+            if (response != null && response.IsSuccess)
+            {
+                var responseString = Convert.ToString(response.Result);
+                if (responseString != null)
+                    references = JsonConvert.DeserializeObject<List<TreasuryReferenceDto>>(responseString);
+            }
+
+            if (character != null && references != null)
+                return View(new CharacterIndexViewModel(character, references));
+            else
+                return NotFound("One or more requests were returned empty or containing bad information.");
+		}
+
 		public async Task<IActionResult> TreasuryManage(Guid treasuryId)
 		{
 			TreasuryDto? treasury = new();
