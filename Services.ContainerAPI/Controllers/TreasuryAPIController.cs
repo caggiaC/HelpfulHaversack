@@ -396,7 +396,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         }
 
         [HttpGet]
-        [Route("characters/search={characterName")]
+        [Route("characters/search={characterName}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -902,7 +902,7 @@ namespace HelpfulHaversack.Services.ContainerAPI.Controllers
         }
 
         [HttpPatch]
-        [Route("characters/characterId")]
+        [Route("characters/{characterId:guid}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
