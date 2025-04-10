@@ -203,7 +203,7 @@ namespace HelpfulHaversack.Web.Services
             return await _baseService.SendAsync(new RequestDto() 
             {
                 ApiType = StaticDetails.ApiType.DELETE,
-                ApiUrl = _baseService + $"treasuries/{treasuryId}"
+                ApiUrl = _urlBase + $"treasuries/{treasuryId}"
             });
         }
 
@@ -212,7 +212,7 @@ namespace HelpfulHaversack.Web.Services
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticDetails.ApiType.DELETE,
-                ApiUrl = _baseService + $"treasuries/{treasuryId}/inventory/{itemId}"
+                ApiUrl = _urlBase + $"treasuries/{treasuryId}/inventory/{itemId}"
             });
         }
 
@@ -221,16 +221,17 @@ namespace HelpfulHaversack.Web.Services
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticDetails.ApiType.DELETE,
-                ApiUrl = _baseService + $"templates/{templateName}"
+                ApiUrl = _urlBase + $"templates/{templateName}"
             });
         }
 
         public async Task<ResponseDto?> GetAllCharactersAsync()
         {
+            string requestLocation = _baseService + "characters";
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticDetails.ApiType.GET,
-                ApiUrl = _baseService + "characters"
+                ApiUrl = _urlBase + "characters"
             });
         }
 
@@ -239,7 +240,7 @@ namespace HelpfulHaversack.Web.Services
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticDetails.ApiType.GET,
-                ApiUrl = _baseService + $"characters/{characterId}"
+                ApiUrl = _urlBase + $"characters/{characterId}"
             });
         }
 
@@ -257,7 +258,7 @@ namespace HelpfulHaversack.Web.Services
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticDetails.ApiType.POST,
-                ApiUrl = _baseService + $"create/character:{characterName}"
+                ApiUrl = _urlBase + $"create/character:{characterName}"
             });
         }
 
@@ -267,7 +268,7 @@ namespace HelpfulHaversack.Web.Services
             {
                 ApiType = StaticDetails.ApiType.PUT,
                 Data = characterDto,
-                ApiUrl = _baseService + $"characters/{characterId}"
+                ApiUrl = _urlBase + $"characters/{characterId}"
             });
         }
 
@@ -286,7 +287,7 @@ namespace HelpfulHaversack.Web.Services
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = StaticDetails.ApiType.DELETE,
-                ApiUrl = _baseService + $"characters/{characterId}"
+                ApiUrl = _urlBase + $"characters/{characterId}"
             });
         }
     }

@@ -35,7 +35,23 @@ namespace HelpfulHaversack.Web.Controllers
 			return View(list);
 		}
 
-		public async Task<IActionResult> CharacterIndex(Guid characterId)
+        public async Task<IActionResult> CharacterIndex()
+        {
+            List<CharacterDto>? list = new();
+
+            ResponseDto? response = await _treasuryService.GetAllCharactersAsync();
+
+            if (response != null && response.IsSuccess)
+            {
+                var responseString = Convert.ToString(response.Result);
+                if (responseString != null)
+                    list = JsonConvert.DeserializeObject<List<CharacterDto>>(responseString);
+            }
+
+            return View(list);
+        }
+
+        public async Task<IActionResult> CharacterManage(Guid characterId)
 		{
 			CharacterDto? character = new();
 			List<TreasuryReferenceDto>? references = new();
@@ -49,14 +65,6 @@ namespace HelpfulHaversack.Web.Controllers
                     character = JsonConvert.DeserializeObject<CharacterDto>(responseString);
             }
 
-			response = await _treasuryService.GetReferenceListAsync();
-
-            if (response != null && response.IsSuccess)
-            {
-                var responseString = Convert.ToString(response.Result);
-                if (responseString != null)
-                    references = JsonConvert.DeserializeObject<List<TreasuryReferenceDto>>(responseString);
-            }
 
             if (character != null && references != null)
                 return View(new CharacterIndexViewModel(character, references));

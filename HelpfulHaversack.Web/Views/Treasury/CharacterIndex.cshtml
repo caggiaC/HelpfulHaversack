@@ -1,7 +1,101 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@model IEnumerable<HelpfulHaversack.Web.Models.Dto.CharacterDto>
 
-    <h1>CharacterIndex</h1>
+@{
+    ViewData["Title"] = "CharacterIndex";
 }
+
+<h1>CharacterIndex</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Xp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Class)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaxHP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CurrentHp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArmorClass)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Str)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dex)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Con)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Wis)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Int)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cha)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Xp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Class)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaxHP)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CurrentHp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArmorClass)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Str)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dex)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Con)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Wis)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Int)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cha)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -5,6 +5,7 @@ namespace HelpfulHaversack.Web.Models.Dto
     {
         public Guid CharacterId { get; set; } = Guid.Empty;
         public Guid InventoryId { get; set; } = Guid.Empty;
+        public string Name { get; set; } = String.Empty;
         public int Xp { get; set; }
         public string Class { get; set; } = String.Empty;
         public int MaxHP { get; set; } = 0;
